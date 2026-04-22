@@ -1,0 +1,1042 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NovoModelo2025</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Serif:ital,opsz,wght@0,8..144,400;0,8..144,700;0,8..144,900;1,8..144,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <style>
+    /* ===== RESET & GLOBALS ===== */
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { overflow-x: hidden !important; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Roboto Serif', Georgia, serif;
+      background: linear-gradient(to bottom, #F3F3F3, #FFFFFF);
+      color: #333;
+      line-height: 1.6;
+    }
+
+    /* ===== COLOR TOKENS ===== */
+    :root {
+      --primary: #2D2D2D;
+      --secondary: #F5EDE8;
+      --accent: #BF694D;
+      --text: #333333;
+      --white: #FFFFFF;
+    }
+
+    img { max-width: 100%; height: auto; display: block; }
+    a { text-decoration: none; color: inherit; }
+
+    /* ===== BUTTONS ===== */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 17px 20px;
+      border-radius: 10px;
+      font-family: 'Roboto Serif', serif;
+      font-weight: 700;
+      font-size: 1rem;
+      color: var(--white);
+      border: none;
+      cursor: pointer;
+      transition: transform 0.3s ease;
+    }
+    .btn:hover { transform: scale(1.05); }
+    .btn-accent { background-color: var(--accent); }
+    .btn-primary { background-color: var(--primary); }
+    .btn i { font-size: 1.2rem; }
+
+    /* ===== HEADER ===== */
+    #inicio {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1% 4%;
+    }
+    .header-logo { width: 19%; }
+    .header-logo img { width: 75%; }
+    .header-cta { display: flex; justify-content: flex-end; align-items: center; }
+
+    /* ===== HERO ===== */
+    .hero {
+      position: relative;
+      min-height: 90vh;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      overflow: hidden;
+    }
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      background-color: var(--primary);
+    }
+    .hero-bg img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: left top;
+    }
+    .hero-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        to right,
+        rgba(0,0,0,0) 0%,
+        rgba(45,45,45,0.2) 40%,
+        rgba(45,45,45,0.45) 70%,
+        rgba(45,45,45,0.6) 100%
+      );
+      z-index: 1;
+    }
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      width: 50%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: flex-end;
+      padding: 5% 5% 5% 3%;
+      text-align: right;
+    }
+    .hero-content h1 {
+      color: var(--secondary);
+      font-size: 2.8rem;
+      font-weight: 900;
+      margin-bottom: 20px;
+      width: 90%;
+      line-height: 1.2;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    }
+    .hero-content p {
+      color: var(--white);
+      font-size: 1.05rem;
+      font-weight: 400;
+      width: 90%;
+      margin-bottom: 30px;
+      line-height: 1.8;
+      text-shadow: 0 1px 10px rgba(0,0,0,0.2);
+    }
+    .hero-content p strong { font-weight: 700; }
+
+    /* ===== SECTION TITLES ===== */
+    .section-title {
+      color: var(--primary);
+      font-size: 2.2rem;
+      font-weight: 900;
+      text-align: center;
+    }
+    .section-subtitle {
+      color: var(--text);
+      font-size: 1rem;
+      text-align: center;
+      max-width: 700px;
+      margin: 15px auto 0;
+    }
+
+    /* ===== TREATMENTS ===== */
+    .treatments {
+      background: var(--white);
+      padding: 70px 4% 40px;
+    }
+    .treatments-header { margin-bottom: 40px; }
+    .treatments-header h2 { width: 94%; margin: 0 auto; }
+    .treatments-grid {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 15px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .treatment-card {
+      width: calc(33.33% - 10px);
+      border: 1px solid var(--secondary);
+      border-radius: 19px;
+      padding: 20px 20px 30px;
+      text-align: center;
+    }
+    .treatment-card .card-icon {
+      width: 23%;
+      margin: 0 auto 15px;
+      aspect-ratio: 1;
+      background: var(--secondary);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .treatment-card .card-icon i {
+      font-size: 2rem;
+      color: var(--accent);
+    }
+    .treatment-card h3 {
+      color: var(--accent);
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+    .treatment-card p {
+      color: #4A4A4A;
+      font-size: 0.9rem;
+      line-height: 1.6;
+    }
+    .treatments-cta {
+      text-align: center;
+      padding: 30px 0 10px;
+    }
+
+    /* ===== HOW I WORK ===== */
+    .how-i-work {
+      background-color: var(--accent);
+      display: flex;
+      align-items: stretch;
+      padding: 6% 4%;
+      gap: 0;
+      position: relative;
+      z-index: 100;
+    }
+    .how-i-work-photo {
+      width: 30%;
+      border-radius: 30px;
+      overflow: hidden;
+      align-self: flex-end;
+    }
+    .how-i-work-photo img {
+      width: 100%;
+      display: block;
+      margin-top: -20%;
+    }
+    .how-i-work-card {
+      width: 65%;
+      background: var(--white);
+      border: 1px solid #C0C0C0;
+      border-radius: 30px;
+      padding: 4%;
+      margin: 1%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .how-i-work-card h2 {
+      color: var(--primary);
+      font-size: 2rem;
+      font-weight: 900;
+      margin-bottom: 25px;
+    }
+    .checklist { list-style: none; margin-bottom: 30px; }
+    .checklist li {
+      color: #464646;
+      font-size: 0.95rem;
+      padding: 8px 0;
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+    }
+    .checklist li i {
+      color: var(--accent);
+      margin-top: 4px;
+      flex-shrink: 0;
+    }
+    .checklist li:first-child { font-weight: 700; }
+
+    /* ===== APPROACH ===== */
+    .approach {
+      background: var(--white);
+      padding: 40px 4%;
+    }
+    .approach-card {
+      background: var(--secondary);
+      border-radius: 35px;
+      padding: 40px 30px 40px;
+      max-width: 1100px;
+      margin: 0 auto;
+      text-align: center;
+    }
+    .approach-card h2 {
+      color: var(--primary);
+      font-size: 2rem;
+      font-weight: 900;
+      width: 60%;
+      margin: 0 auto 25px;
+    }
+    .approach-card h2 strong { font-weight: 900; }
+    .approach-card .approach-text {
+      color: var(--text);
+      font-size: 0.95rem;
+      width: 89%;
+      margin: 0 auto 30px;
+      line-height: 1.8;
+      text-align: center;
+    }
+
+    /* ===== VIDEO SECTION ===== */
+    .video-section {
+      display: flex;
+      align-items: center;
+      padding: 3% 4%;
+      gap: 30px;
+    }
+    .video-section h2 {
+      width: 50%;
+      color: var(--primary);
+      font-size: 2rem;
+      font-weight: 900;
+      text-align: center;
+    }
+    .video-section h2 strong { font-weight: 900; }
+    .video-container {
+      width: 50%;
+      position: relative;
+      border-radius: 15px;
+      overflow: hidden;
+      aspect-ratio: 16/9;
+      cursor: pointer;
+    }
+    .video-container img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .video-overlay {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0,0,0,0.3);
+    }
+    .video-overlay i {
+      font-size: 4rem;
+      color: var(--white);
+      opacity: 0.9;
+    }
+
+    /* ===== TESTIMONIALS ===== */
+    .testimonials {
+      background: rgba(218,218,218,0.24);
+      position: relative;
+      display: flex;
+      align-items: center;
+      padding: 60px 4%;
+      gap: 30px;
+    }
+    .testimonials::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: rgba(134,147,142,0.07);
+      pointer-events: none;
+    }
+    .testimonials-header { width: 33.33%; position: relative; z-index: 1; }
+    .testimonials-header span {
+      display: block;
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: var(--primary);
+      text-transform: uppercase;
+      margin-bottom: 5px;
+    }
+    .testimonials-header h2 {
+      color: var(--accent);
+      font-size: 2.2rem;
+      font-weight: 900;
+    }
+    .testimonials-content {
+      width: 66.67%;
+      position: relative;
+      z-index: 1;
+    }
+    .testimonial-cards {
+      display: flex;
+      gap: 20px;
+    }
+    .testimonial-card {
+      flex: 1;
+      background: var(--white);
+      border-radius: 15px;
+      padding: 25px;
+      box-shadow: 0 2px 15px rgba(0,0,0,0.06);
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.3s ease;
+      cursor: pointer;
+    }
+    .testimonial-card:hover { transform: translateY(-5px); }
+    .testimonial-card .stars {
+      color: #F5A623;
+      margin-bottom: 10px;
+      font-size: 0.9rem;
+    }
+    .testimonial-card p {
+      color: #4A4A4A;
+      font-size: 0.9rem;
+      font-style: italic;
+      margin-bottom: 15px;
+      line-height: 1.6;
+    }
+    .testimonial-card .author {
+      font-weight: 700;
+      color: var(--primary);
+      font-size: 0.85rem;
+    }
+
+    /* ===== ABOUT ME ===== */
+    .about-me {
+      background-color: var(--accent);
+      display: flex;
+      align-items: center;
+      padding: 80px 4%;
+      gap: 0;
+    }
+    .about-photo {
+      width: 30%;
+      border-radius: 30px;
+      overflow: hidden;
+      align-self: center;
+    }
+    .about-photo img {
+      width: 100%;
+      display: block;
+      margin-top: -10%;
+      margin-bottom: -10%;
+    }
+    .about-card {
+      width: 65%;
+      background: var(--secondary);
+      border-radius: 30px;
+      padding: 4%;
+      margin: 1%;
+      position: relative;
+      z-index: 2;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+    .about-card h2 {
+      color: var(--accent);
+      font-size: 30px;
+      font-weight: 900;
+      margin-bottom: 2px;
+    }
+    .about-card .crp {
+      color: #BF694D;
+      font-size: 0.95rem;
+      font-weight: 400;
+      margin-bottom: 15px;
+    }
+    .about-card .bio {
+      color: var(--text);
+      font-size: 0.95rem;
+      line-height: 1.8;
+      margin-bottom: 25px;
+    }
+
+    /* ===== FAQ ===== */
+    .faq {
+      padding: 80px 4%;
+    }
+    .faq-card {
+      background: var(--primary);
+      border-radius: 35px;
+      padding: 40px 30px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    .faq-card h2 {
+      color: var(--secondary);
+      font-size: 2rem;
+      font-weight: 900;
+      margin-bottom: 30px;
+    }
+    .faq-item {
+      border-bottom: 1px solid rgba(255,255,255,0.15);
+    }
+    .faq-item:last-child { border-bottom: none; }
+    .faq-question {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 18px 0;
+      cursor: pointer;
+      color: var(--white);
+      font-size: 1rem;
+      font-weight: 700;
+    }
+    .faq-question i {
+      transition: transform 0.3s ease;
+      font-size: 0.85rem;
+    }
+    .faq-item.active .faq-question i { transform: rotate(180deg); }
+    .faq-answer {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s ease, padding 0.3s ease;
+    }
+    .faq-item.active .faq-answer {
+      max-height: 300px;
+      padding-bottom: 18px;
+    }
+    .faq-answer p {
+      color: var(--white);
+      font-size: 0.9rem;
+      line-height: 1.7;
+      opacity: 0.85;
+    }
+
+
+    /* ===== INSTAGRAM ===== */
+    .instagram {
+      background: #F1F1F1;
+      padding: 40px 4%;
+      text-align: center;
+    }
+    .instagram-profile {
+      margin-bottom: 25px;
+    }
+    .instagram-profile-link {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      max-width: 900px;
+      margin: 0 auto;
+      justify-content: center;
+    }
+    .instagram-avatar {
+      width: 90px;
+      height: 90px;
+      border-radius: 50%;
+      overflow: hidden;
+      flex-shrink: 0;
+      border: 3px solid transparent;
+      background: linear-gradient(white, white) padding-box,
+                  linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888) border-box;
+    }
+    .instagram-avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .instagram-info {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      text-align: left;
+    }
+    .instagram-username {
+      font-weight: 700;
+      font-size: 1.1rem;
+      color: var(--primary);
+    }
+    .instagram-bio {
+      font-size: 0.85rem;
+      color: #555;
+      line-height: 1.5;
+    }
+    .instagram-grid {
+      display: flex;
+      gap: 15px;
+      max-width: 900px;
+      margin: 0 auto 30px;
+    }
+    .instagram-grid a {
+      flex: 1;
+      border-radius: 20px;
+      overflow: hidden;
+      transition: transform 0.3s;
+    }
+    .instagram-grid a:hover { transform: scale(1.03); }
+    .instagram-grid img {
+      width: 100%;
+      aspect-ratio: 1;
+      object-fit: cover;
+    }
+
+    /* ===== FOOTER ===== */
+    .footer {
+      background: var(--primary);
+      min-height: 136px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 30px 4%;
+    }
+    .footer-inner {
+      width: 100%;
+      max-width: 1204px;
+      border-top: 1px solid rgba(173,173,173,0.44);
+      padding-top: 25px;
+      text-align: center;
+    }
+    .footer-logo { width: 180px; margin: 0 auto 15px; filter: brightness(0) invert(1); }
+    .footer p {
+      color: var(--white);
+      font-size: 0.85rem;
+      font-weight: 400;
+    }
+
+    /* ===== ANIMATIONS ===== */
+    @keyframes fadeInDown {
+      from { opacity: 0; transform: translateY(-30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeInLeft {
+      from { opacity: 0; transform: translateX(-40px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    .animate-fade-in-down { animation: fadeInDown 0.8s ease forwards; }
+    .animate-fade-in-left { animation: fadeInLeft 0.8s ease forwards; }
+    .animate-fade-in { animation: fadeIn 0.8s ease forwards; }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 1024px) {
+      .hero-content h1 { font-size: 2rem; }
+      .hero-content { width: 60%; padding: 5% 4%; }
+      .how-i-work { padding: 8%; }
+      .about-photo { min-height: 450px; border-radius: 60px; }
+    }
+
+    @media (max-width: 768px) {
+      #inicio { padding: 20px 10px; }
+      .header-logo { width: 50%; }
+      .header-logo img { width: 71%; }
+      .header-cta { display: none; }
+
+      .hero { min-height: 85vh; }
+      .hero-overlay {
+        background: linear-gradient(
+          to bottom,
+          rgba(0,0,0,0) 0%,
+          rgba(45,45,45,0.3) 50%,
+          rgba(45,45,45,0.6) 100%
+        );
+      }
+      .hero-content {
+        width: 100%;
+        text-align: center;
+        align-items: center;
+        padding: 30% 8% 10%;
+      }
+      .hero-content h1 { width: 100%; text-align: center; font-size: 2rem; }
+      .hero-content p { width: 100%; text-align: center; }
+
+      .treatments { padding: 10% 10% 20px; }
+      .treatments-grid { flex-direction: column; gap: 0; }
+      .treatment-card {
+        width: 100%;
+        margin: 20px 0;
+      }
+      .treatment-card .card-icon { width: 19%; }
+
+      .how-i-work {
+        flex-direction: column;
+        padding: 13% 5% 5%;
+      }
+      .how-i-work-photo { width: 100%; border-radius: 20px; }
+      .how-i-work-card {
+        width: 100%;
+        margin: -20% 0 0;
+        padding: 10% 5%;
+        position: relative;
+        z-index: 2;
+      }
+
+      .approach { padding: 11% 5%; }
+      .approach-card { padding: 30px 20px; }
+      .approach-card h2 { width: 90%; font-size: 1.5rem; }
+      .approach-card .approach-text { width: 95%; }
+
+      .video-section {
+        flex-direction: column;
+        padding: 6%;
+      }
+      .video-section h2, .video-container { width: 100%; }
+
+      .testimonials {
+        flex-direction: column;
+        padding: 10% 4% 20%;
+      }
+      .testimonials-header, .testimonials-content { width: 100%; }
+      .testimonial-cards { flex-direction: column; }
+
+      .about-me {
+        flex-direction: column;
+        padding: 5%;
+      }
+      .about-photo {
+        width: 60%;
+        border-radius: 20px;
+      }
+      .about-card {
+        width: 100%;
+        margin-left: 0;
+        margin-top: -74px;
+      }
+
+      .faq { padding: 0; margin: 0; }
+      .faq-card { border-radius: 0; padding: 7%; }
+
+
+      .instagram { padding: 20px 10px; }
+      .instagram-grid { gap: 8px; }
+
+      .footer-logo { width: 62%; margin: 8% auto; }
+
+      .section-title { font-size: 1.6rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header id="inicio">
+    <div class="header-logo">
+      <a href="#inicio">
+        <img src="Nova pasta/logo-bianca-goncalves.webp" alt="Bianca Gonçalves - Psicóloga">
+      </a>
+    </div>
+    <div class="header-cta">
+      <a href="#" class="btn btn-accent" target="_blank">
+        <i class="fab fa-whatsapp"></i> Agende uma Consulta
+      </a>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-bg">
+      <img src="Nova pasta/ChatGPT Image 3 de abr. de 2026, 16_27_29.png" alt="Bianca Gonçalves - Psicóloga">
+    </div>
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <h1>Você merece se sentir segura, confiante e plena.</h1>
+      <p>
+        Se você sente que está repetindo padrões nos seus relacionamentos, tem dificuldade em impor limites ou vive com medo, saiba que você não está sozinha nessa jornada.<br><br>
+        Meu trabalho é ajudar mulheres como você a reconhecerem o próprio valor, fortalecerem sua autoestima e transformarem seus relacionamentos — com os outros e consigo mesmas.<br><br>
+        <strong>Comece sua transformação hoje. Você não precisa enfrentar seus medos e desafios sozinha.</strong>
+      </p>
+      <a href="#" class="btn btn-accent animate-fade-in-down" target="_blank">
+        <i class="fab fa-whatsapp"></i> Agende uma Consulta
+      </a>
+    </div>
+  </section>
+
+  <!-- ANCHOR: TRATAMENTOS -->
+  <div id="tratamentos"></div>
+
+  <!-- TREATMENTS -->
+  <section class="treatments">
+    <div class="treatments-header">
+      <h2 class="section-title">Seus desafios emocionais não precisam mais te limitar.</h2>
+      <p class="section-subtitle">Através de abordagens baseadas em evidências, como a TCC e a Terapia do Esquema, ajudo você a superar padrões que te impedem de viver com leveza e confiança.</p>
+    </div>
+
+    <div class="treatments-grid">
+      <div class="treatment-card">
+        <div class="card-icon"><i class="fas fa-brain"></i></div>
+        <h3>Autoestima e Autoconfiança</h3>
+        <p>Reconheça seu valor e construa uma relação mais saudável consigo mesma. Trabalharemos juntas para transformar crenças que sabotam sua autoestima e te impedem de avançar.</p>
+      </div>
+      <div class="treatment-card">
+        <div class="card-icon"><i class="fas fa-heart"></i></div>
+        <h3>Relacionamentos Tóxicos</h3>
+        <p>Rompa padrões negativos que se repetem nas suas escolhas amorosas e construa relacionamentos mais saudáveis, equilibrados e baseados no respeito mútuo.</p>
+      </div>
+      <div class="treatment-card">
+        <div class="card-icon"><i class="fas fa-comments"></i></div>
+        <h3>Dificuldade em Impor Limites</h3>
+        <p>Aprenda a comunicar suas emoções, estabelecer limites saudáveis e ser respeitada — sem culpa. Você merece ocupar seu espaço com segurança.</p>
+      </div>
+      <div class="treatment-card">
+        <div class="card-icon"><i class="fas fa-seedling"></i></div>
+        <h3>Medo de Ficar Sozinha</h3>
+        <p>Supere o medo de ficar sozinha e assuma o controle da sua vida. Descubra que a sua própria companhia pode ser a mais transformadora de todas.</p>
+      </div>
+      <div class="treatment-card">
+        <div class="card-icon"><i class="fas fa-hand-holding-heart"></i></div>
+        <h3>Ansiedade e Insegurança</h3>
+        <p>Desenvolva ferramentas práticas para lidar com a ansiedade, a autocrítica paralisante e a insegurança que te impedem de viver com mais leveza e bem-estar.</p>
+      </div>
+      <div class="treatment-card">
+        <div class="card-icon"><i class="fas fa-spa"></i></div>
+        <h3>Autoconhecimento e Identidade</h3>
+        <p>Descubra quem você realmente é — e se sinta bem com isso. Regate sua identidade, seus desejos e a confiança para construir a vida que você merece.</p>
+      </div>
+    </div>
+
+    <div class="treatments-cta">
+      <a href="#" class="btn btn-accent" target="_blank">
+        <i class="fab fa-whatsapp"></i> Agende uma Consulta
+      </a>
+    </div>
+  </section>
+
+  <!-- ANCHOR: MEU TRABALHO -->
+  <div id="meu-trabalho"></div>
+
+  <!-- HOW I WORK -->
+  <section class="how-i-work">
+    <div class="how-i-work-photo animate-fade-in-left">
+      <img src="Nova pasta/IMG_7021.jpg" alt="Bianca Gonçalves - Psicóloga">
+    </div>
+    <div class="how-i-work-card animate-fade-in">
+      <h2>Como funciona meu trabalho</h2>
+      <ul class="checklist">
+        <li>Utilizo técnicas de TCC e Terapia do Esquema — métodos comprovados cientificamente para promover mudanças profundas e duradouras.</li>
+        <li><i class="fas fa-check-circle"></i> Romper padrões negativos que limitam sua vida e seus relacionamentos.</li>
+        <li><i class="fas fa-check-circle"></i> Construir relacionamentos mais saudáveis e equilibrados.</li>
+        <li><i class="fas fa-check-circle"></i> Descobrir quem você realmente é — e se sentir bem com isso.</li>
+        <li><i class="fas fa-check-circle"></i> Aprender a comunicar suas emoções, estabelecer limites e ser respeitada.</li>
+        <li><i class="fas fa-check-circle"></i> Ofereço um espaço seguro, acolhedor e sem julgamentos para você explorar suas emoções.</li>
+      </ul>
+      <div style="display: flex; justify-content: flex-end;">
+        <a href="#" class="btn btn-primary" target="_blank">
+          <i class="fab fa-whatsapp"></i> Agende uma Consulta
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ANCHOR: ABORDAGEM -->
+  <div id="abordagem"></div>
+
+  <!-- APPROACH -->
+  <section class="approach">
+    <div class="approach-card">
+      <h2>O QUE É E COMO FUNCIONA <strong>A MINHA ABORDAGEM?</strong></h2>
+      <div class="approach-text">
+        <p>
+          A Terapia Cognitivo-Comportamental (TCC) é uma abordagem estruturada e baseada em evidências científicas, que parte do princípio de que nossos pensamentos influenciam diretamente nossas emoções e comportamentos. Junto com a Terapia do Esquema, trabalhamos para identificar e transformar padrões profundos que foram construídos ao longo da sua vida.<br><br>
+          É um processo ativo e colaborativo, onde você se torna protagonista da sua própria transformação. Meu foco é te ajudar a construir ferramentas práticas para transformar não só como você pensa, mas como você vive — conquistando mais autonomia, confiança e qualidade de vida.<br><br>
+          Você não precisa enfrentar tudo isso sozinha. Vamos juntas construir a vida que você merece.
+        </p>
+      </div>
+      <a href="#" class="btn btn-accent" target="_blank">
+        <i class="fab fa-whatsapp"></i> Agende uma Consulta
+      </a>
+    </div>
+  </section>
+
+  <!-- VIDEO SECTION -->
+  <section class="video-section">
+    <h2>SAIBA MAIS SOBRE <strong>A SUA TRANSFORMAÇÃO</strong></h2>
+    <div class="video-container">
+      <video controls style="position:absolute;inset:0;width:100%;height:100%;border-radius:15px;background:#000;">
+        <source src="video/video.mp4" type="video/mp4">
+      </video>
+    </div>
+  </section>
+
+  <!-- ANCHOR: DEPOIMENTOS -->
+  <div id="depoimentos"></div>
+
+  <!-- TESTIMONIALS -->
+  <section class="testimonials">
+    <div class="testimonials-header">
+      <span>O QUE DIZEM MINHAS PACIENTES</span>
+      <h2>Depoimentos</h2>
+    </div>
+    <div class="testimonials-content">
+      <div class="testimonial-cards">
+        <a href="https://www.google.com/search?client=safari&hs=vtwU&sca_esv=c93d660d18cbc2b2&hl=pt-br&sxsrf=ANbL-n5drJBYRtcoB3Byc75PBOy2pWkSpg:1774867334039&q=avalia%C3%A7%C3%B5es+sobre+psibiancagoncalves.com.br&uds=ALYpb_kQbhpaS2wCL3QHzTXZyp4c49BxhZQIiNLzFWeKc16or9Ue71n8UZlbm_q6SgyXaHzImdGi5LhtKc0Xy8aOWaHNjB5cK4e_WYBGFg-uqdoadXQYfcd4JIf--RC160qb7Qzi6f7e1qqB8qUSZ6nsyxVNesKHCVNEQk0sHtXeq2-8BTvYPcSIrQvKdfK-ZbgQxrxXbxtI2xGY7DWX3XOW_OVuKYom9JliWWnK8mK-HK0Qxi50fZkjXlhFFzMlOKCrfjuiU1v5VZ8wRFff4pTYaKV9-d1Kssg7vmhegl1m2Iqw6xvuPNsxfCS5D90xnyNfbRUeptS7BrO0S4oeTdMQmEMyl5TqsrX1RtteNQJslvUvoI8CiW_prfDgRJH6o56dDxkjAVDOyVRucaRFncccH2WbeAPYZaq4HAwjBxdSYaUpNNu4XUGqVMzWzgH0iqwc2kkt2WLP&si=AL3DRZEsmMGCryMMFSHJ3StBhOdZ2-6yYkXd_doETEE1OR-qOb0VmyQcxrbdRQo5JcK7XRfqjOn8jvTEyR0S4aAagmmkUfAc8PYeYl1D64dOySj1xbSXD9hLLz8QfGl82yhsd5GQFsfc8R1Kzmf8dQBGPuvTYGU-X8DQbUOxxcX9M0sw8gbiaf0%3D&sa=X&ved=2ahUKEwjC3N-HuMeTAxVxs5UCHaWOFLQQk8gLegQIfRAB&ictx=1&biw=428&bih=821&dpr=3&zx=1775242665000" target="_blank" class="testimonial-card">
+          <div class="stars">
+            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+          </div>
+          <p>"Simplesmente maravilhosa! Extremamente profissional, empática e atenciosa, me acolheu desde o início com muito cuidado. Tenho evoluído em várias áreas da minha vida, e em muitos desses momentos pude contar com o apoio e sensibilidade dela. Quando comecei o tratamento, estava em um momento muito sombrio, não sei o que seria de mim sem a Dra. Bianca. Só gratidão por esse acompanhamento tão humano e acolhedor. ❤️"</p>
+          <span class="author">— Raissa Gomes</span>
+        </a>
+        <a href="https://www.google.com/search?client=safari&hs=vtwU&sca_esv=c93d660d18cbc2b2&hl=pt-br&sxsrf=ANbL-n5drJBYRtcoB3Byc75PBOy2pWkSpg:1774867334039&q=avalia%C3%A7%C3%B5es+sobre+psibiancagoncalves.com.br&uds=ALYpb_kQbhpaS2wCL3QHzTXZyp4c49BxhZQIiNLzFWeKc16or9Ue71n8UZlbm_q6SgyXaHzImdGi5LhtKc0Xy8aOWaHNjB5cK4e_WYBGFg-uqdoadXQYfcd4JIf--RC160qb7Qzi6f7e1qqB8qUSZ6nsyxVNesKHCVNEQk0sHtXeq2-8BTvYPcSIrQvKdfK-ZbgQxrxXbxtI2xGY7DWX3XOW_OVuKYom9JliWWnK8mK-HK0Qxi50fZkjXlhFFzMlOKCrfjuiU1v5VZ8wRFff4pTYaKV9-d1Kssg7vmhegl1m2Iqw6xvuPNsxfCS5D90xnyNfbRUeptS7BrO0S4oeTdMQmEMyl5TqsrX1RtteNQJslvUvoI8CiW_prfDgRJH6o56dDxkjAVDOyVRucaRFncccH2WbeAPYZaq4HAwjBxdSYaUpNNu4XUGqVMzWzgH0iqwc2kkt2WLP&si=AL3DRZEsmMGCryMMFSHJ3StBhOdZ2-6yYkXd_doETEE1OR-qOb0VmyQcxrbdRQo5JcK7XRfqjOn8jvTEyR0S4aAagmmkUfAc8PYeYl1D64dOySj1xbSXD9hLLz8QfGl82yhsd5GQFsfc8R1Kzmf8dQBGPuvTYGU-X8DQbUOxxcX9M0sw8gbiaf0%3D&sa=X&ved=2ahUKEwjC3N-HuMeTAxVxs5UCHaWOFLQQk8gLegQIfRAB&ictx=1&biw=428&bih=821&dpr=3&zx=1775242665000" target="_blank" class="testimonial-card">
+          <div class="stars">
+            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+          </div>
+          <p>"Faço terapia com a Bianca há 2 anos, e foi incrível a minha evolução nesse período. Ela ouve sem julgamentos e sempre tem técnicas para ajudar em situações difíceis. Sou eternamente grata a ela!"</p>
+          <span class="author">— Adrielle Cristina André</span>
+        </a>
+        <a href="https://www.google.com/search?client=safari&hs=vtwU&sca_esv=c93d660d18cbc2b2&hl=pt-br&sxsrf=ANbL-n5drJBYRtcoB3Byc75PBOy2pWkSpg:1774867334039&q=avalia%C3%A7%C3%B5es+sobre+psibiancagoncalves.com.br&uds=ALYpb_kQbhpaS2wCL3QHzTXZyp4c49BxhZQIiNLzFWeKc16or9Ue71n8UZlbm_q6SgyXaHzImdGi5LhtKc0Xy8aOWaHNjB5cK4e_WYBGFg-uqdoadXQYfcd4JIf--RC160qb7Qzi6f7e1qqB8qUSZ6nsyxVNesKHCVNEQk0sHtXeq2-8BTvYPcSIrQvKdfK-ZbgQxrxXbxtI2xGY7DWX3XOW_OVuKYom9JliWWnK8mK-HK0Qxi50fZkjXlhFFzMlOKCrfjuiU1v5VZ8wRFff4pTYaKV9-d1Kssg7vmhegl1m2Iqw6xvuPNsxfCS5D90xnyNfbRUeptS7BrO0S4oeTdMQmEMyl5TqsrX1RtteNQJslvUvoI8CiW_prfDgRJH6o56dDxkjAVDOyVRucaRFncccH2WbeAPYZaq4HAwjBxdSYaUpNNu4XUGqVMzWzgH0iqwc2kkt2WLP&si=AL3DRZEsmMGCryMMFSHJ3StBhOdZ2-6yYkXd_doETEE1OR-qOb0VmyQcxrbdRQo5JcK7XRfqjOn8jvTEyR0S4aAagmmkUfAc8PYeYl1D64dOySj1xbSXD9hLLz8QfGl82yhsd5GQFsfc8R1Kzmf8dQBGPuvTYGU-X8DQbUOxxcX9M0sw8gbiaf0%3D&sa=X&ved=2ahUKEwjC3N-HuMeTAxVxs5UCHaWOFLQQk8gLegQIfRAB&ictx=1&biw=428&bih=821&dpr=3&zx=1775242665000" target="_blank" class="testimonial-card">
+          <div class="stars">
+            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+          </div>
+          <p>"Bianca é ótima, faço sessões remoto com ela desde pandemia e funciona muito bem. Ela faz a gente se sentir a vontade e confortável. Já me ajudou em vários temas (tanto pessoal como profissional), nos ajuda sempre evoluir e buscar o melhor de nós mesmo. Super recomendo!"</p>
+          <span class="author">— Milene Paschoalini</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ANCHOR: SOBRE MIM -->
+  <div id="sobre-mim"></div>
+
+  <!-- ABOUT ME -->
+  <section class="about-me">
+    <div class="about-photo">
+      <img src="Nova pasta/IMG_7036.jpg" alt="Bianca Gonçalves - Psicóloga">
+    </div>
+    <div class="about-card">
+      <h2>Sobre mim</h2>
+      <p class="crp">CRP 00/00000</p>
+      <div class="bio">
+        <p>
+          Olá! Eu sou psicóloga clínica especialista em ajudar mulheres a se reconectarem com seu valor.<br><br>
+          Trabalhando com mulheres entre 20 e 40 anos, entendi que, muitas vezes, os maiores desafios que enfrentamos não vêm de fora — mas de dentro. Através da Terapia Cognitivo-Comportamental (TCC) e da Terapia do Esquema, ajudo mulheres como você a:<br><br>
+          • Reconhecer e transformar crenças que sabotam sua autoestima<br>
+          • Superar medos relacionados a ficar sozinha ou fracassar<br>
+          • Romper padrões tóxicos nos relacionamentos e nas escolhas amorosas<br>
+          • Construir uma vida mais confiante, leve e cheia de significado<br><br>
+          Meu propósito é criar um espaço seguro e acolhedor para você se sentir ouvida, compreendida e, acima de tudo, apoiada na construção da sua melhor versão.<br><br>
+          <strong>Pronta para começar sua transformação?</strong>
+        </p>
+      </div>
+      <a href="#" class="btn btn-primary animate-fade-in-down" target="_blank">
+        <i class="fab fa-whatsapp"></i> Agende uma Consulta
+      </a>
+    </div>
+  </section>
+
+  <!-- ANCHOR: FAQ -->
+  <div id="faq"></div>
+
+  <!-- FAQ -->
+  <section class="faq">
+    <div class="faq-card">
+      <h2>Dúvidas Frequentes</h2>
+
+      <div class="faq-item active">
+        <div class="faq-question" onclick="toggleFaq(this)">
+          <span>O que é a Terapia Cognitivo-Comportamental (TCC)?</span>
+          <i class="fas fa-chevron-down"></i>
+        </div>
+        <div class="faq-answer">
+          <p>A TCC é uma abordagem terapêutica baseada em evidências científicas que trabalha a relação entre pensamentos, emoções e comportamentos. É uma das abordagens mais eficazes para tratar ansiedade, depressão, baixa autoestima e dificuldades nos relacionamentos. Junto com a Terapia do Esquema, ajudo você a identificar e transformar padrões profundos que foram construídos ao longo da vida.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFaq(this)">
+          <span>Terapia online funciona mesmo?</span>
+          <i class="fas fa-chevron-down"></i>
+        </div>
+        <div class="faq-answer">
+          <p>Sim! A terapia online tem eficácia comprovada por diversas pesquisas científicas, sendo tão eficaz quanto o atendimento presencial. É uma opção segura, prática e acolhedora — você pode fazer suas sessões do conforto da sua casa, com a mesma qualidade e privacidade do consultório.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFaq(this)">
+          <span>Qual o valor da consulta?</span>
+          <i class="fas fa-chevron-down"></i>
+        </div>
+        <div class="faq-answer">
+          <p>O Conselho Federal de Psicologia não permite a divulgação de valores em ambientes públicos. Para saber os valores e agendar sua sessão, entre em contato pelo WhatsApp.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFaq(this)">
+          <span>Como agendar uma consulta?</span>
+          <i class="fas fa-chevron-down"></i>
+        </div>
+        <div class="faq-answer">
+          <p>O agendamento é simples e rápido! Basta clicar no botão "Agende uma Consulta" em qualquer lugar desta página para ser direcionada ao meu WhatsApp. Lá, vamos alinhar horários, esclarecer dúvidas e dar o primeiro passo juntas.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFaq(this)">
+          <span>Qual a duração das sessões?</span>
+          <i class="fas fa-chevron-down"></i>
+        </div>
+        <div class="faq-answer">
+          <p>As sessões têm duração de 50 minutos, com frequência semanal. A regularidade é fundamental para que o processo terapêutico gere resultados consistentes e duradouros na sua vida.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- INSTAGRAM -->
+  <section class="instagram">
+    <div class="instagram-profile">
+      <a href="https://www.instagram.com/biancagoncalvespsi/" target="_blank" class="instagram-profile-link">
+        <div class="instagram-avatar">
+          <img src="Nova pasta/469287926_1558470885035287_5507383517635873350_n.jpg" alt="biancagoncalvespsi">
+        </div>
+        <div class="instagram-info">
+          <span class="instagram-username">biancagoncalvespsi</span>
+          <span class="instagram-bio">✨Guio mulheres para conquistarem a independência emocional ✨<br>💻 Atendimento 100% online</span>
+        </div>
+      </a>
+    </div>
+    <div class="instagram-grid">
+      <a href="https://www.instagram.com/p/DE5wBrDvEB5/?img_index=1" target="_blank">
+        <img src="Nova pasta/imagem_post_1.jpg" alt="Quem sou eu? - Bianca Gonçalves">
+      </a>
+      <a href="https://www.instagram.com/p/DE2Hjq0xTEr/" target="_blank">
+        <img src="Nova pasta/imagem_post_2.jpg" alt="As vezes você precisa se perder para se encontrar">
+      </a>
+      <a href="https://www.instagram.com/p/DE2HX2RRUBv/" target="_blank">
+        <img src="Nova pasta/imagem_post_3.jpg" alt="Florescer - Autoestima e Independência Emocional">
+      </a>
+    </div>
+    <a href="https://www.instagram.com/biancagoncalvespsi/" class="btn btn-accent" target="_blank">
+      <i class="fab fa-instagram"></i> Instagram
+    </a>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <img src="Nova pasta/logo-bianca-goncalves.webp" alt="Bianca Gonçalves - Psicóloga" class="footer-logo">
+      <p>2025 Nome Completo. Todos os direitos reservados. | CRP 00/0000</p>
+    </div>
+  </footer>
+
+  <script>
+    // FAQ Toggle
+    function toggleFaq(el) {
+      const item = el.parentElement;
+      const wasActive = item.classList.contains('active');
+      // Close all
+      document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('active'));
+      // Open clicked if it was closed
+      if (!wasActive) item.classList.add('active');
+    }
+
+    // Video Play (replace overlay with iframe)
+    function playVideo(container) {
+      container.innerHTML = '<iframe src="https://player.vimeo.com/video/235215203?autoplay=1" style="position:absolute;inset:0;width:100%;height:100%;border:0;" allow="autoplay; fullscreen" allowfullscreen></iframe>';
+      container.style.position = 'relative';
+    }
+
+    // Scroll animations (Intersection Observer)
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.style.opacity = '1';
+          entry.target.style.transform = 'translateY(0)';
+        }
+      });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.treatment-card, .approach-card, .testimonial-card, .faq-card').forEach(el => {
+      el.style.opacity = '0';
+      el.style.transform = 'translateY(30px)';
+      el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+      observer.observe(el);
+    });
+  </script>
+
+</body>
+</html>
