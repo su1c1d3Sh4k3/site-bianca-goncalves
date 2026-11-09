@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /versao-antiga/
+
+Sitemap: https://psibiancagoncalves.com.br/sitemap.xml
