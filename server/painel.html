@@ -76,8 +76,11 @@
     .pill.off { background: var(--sand); color: var(--ink-2); }
     .pill.warn { background: var(--amber-soft); color: var(--amber); }
     .camp dl { display: grid; grid-template-columns: 1fr 1fr; gap: 14px 12px; margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--line); }
+    .status-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+    .status-hint { font-size: 13px; color: var(--ink-2); margin-top: 8px; line-height: 1.45; }
+    .pill.bad { background: #FBE4E0; color: #A3321C; }
     .camp dt { font-size: 12px; color: var(--ink-3); }
-    .camp dd { font-size: 20px; font-weight: 600; letter-spacing: -.01em; }
+    .camp dd { font-size: 19px; font-weight: 600; letter-spacing: -.01em; }
     .camp dd.green { color: var(--green); }
 
     table { width: 100%; border-collapse: collapse; background: var(--card); border-radius: 20px; overflow: hidden; border: 1px solid var(--line); }
@@ -183,12 +186,26 @@
       return n || 'Campanha';
     }
     function kind(c) { return /whats/i.test(c.name || '') ? 'Pessoa toca no anúncio e abre o WhatsApp direto' : 'Pessoa clica no anúncio e conhece o site antes'; }
-    function statusPill(c) {
-      if (c.status === 'ENABLED' && c.servingIssue) return '<span class="pill warn">● ' + esc(c.servingIssue) + '</span>';
-      if (c.status === 'ENABLED') return '<span class="pill on">● Ativa</span>';
-      if (c.status === 'PAUSED') return '<span class="pill off">❚❚ Pausada</span>';
-      return '<span class="pill off">Removida</span>';
+    var PRIMARY = {
+      ELIGIBLE: ['on', 'Rodando', 'O anúncio está liberado e pode aparecer no Google.'],
+      LEARNING: ['on', 'Rodando · em aprendizado', 'Primeiros dias: o Google está aprendendo para quem mostrar o anúncio.'],
+      LIMITED: ['warn', 'Rodando com limitação', 'Está rodando, mas algo limita o alcance (orçamento, lance ou política).'],
+      PENDING: ['warn', 'Em análise pelo Google', 'Os anúncios estão sendo revisados. Costuma levar algumas horas.'],
+      NOT_ELIGIBLE: ['bad', 'Parada', 'O Google não está exibindo esta campanha. Precisa de ajuste.'],
+      MISCONFIGURED: ['bad', 'Parada · configuração', 'Há um problema de configuração impedindo a veiculação.'],
+      ENDED: ['off', 'Encerrada', 'A campanha chegou à data de término.']
+    };
+    function statusInfo(c) {
+      if (c.status === 'PAUSED') return ['off', 'Pausada', 'Desligada manualmente. Não gasta nada enquanto estiver pausada.'];
+      if (c.status === 'REMOVED') return ['off', 'Removida', ''];
+      if (c.status === 'ENABLED') return PRIMARY[c.primaryStatus] || (c.servingIssue ? ['warn', c.servingIssue, ''] : ['on', 'Ativa', '']);
+      return ['off', '—', ''];
     }
+    function statusPill(c) {
+      var st = statusInfo(c);
+      return '<span class="pill ' + st[0] + '">● ' + esc(st[1]) + '</span>';
+    }
+    function isRunning(c) { var st = statusInfo(c); return c.status === 'ENABLED' && st[0] !== 'bad' && c.primaryStatus !== 'PENDING'; }
 
     function aggregate(r) {
       var byCamp = {}, byDay = {};
@@ -239,10 +256,11 @@
       var cpa = t.wa ? t.cost / t.wa : null;
       var ctr = t.impr ? t.clicks / t.impr : null;
       var periodTxt = { today: 'Hoje', '7': 'Nos últimos 7 dias', '30': 'Nos últimos 30 dias', month: 'Neste mês' }[period];
-      var active = a.list.filter(function (k) { return k.c.status === 'ENABLED'; }).length;
+      var active = a.list.filter(function (k) { return isRunning(k.c); }).length;
+      var pending = a.list.filter(function (k) { return k.c.status === 'ENABLED' && k.c.primaryStatus === 'PENDING'; }).length;
 
       var summary;
-      if (t.impr === 0) summary = periodTxt + ', os anúncios ainda não apareceram no Google. ' + (active ? 'As campanhas estão ativas: os primeiros resultados costumam surgir em algumas horas.' : 'Nenhuma campanha está ativa no momento.');
+      if (t.impr === 0) summary = periodTxt + ', os anúncios ainda não apareceram no Google. ' + (pending ? (active ? active + (active === 1 ? ' campanha já está rodando e ' : ' campanhas já estão rodando e ') : '') + pending + (pending === 1 ? ' está' : ' estão') + ' em análise pelo Google. Os primeiros resultados costumam surgir em algumas horas.' : active ? 'As campanhas estão rodando: os primeiros resultados costumam surgir em algumas horas.' : 'Nenhuma campanha está rodando no momento.');
       else {
         summary = periodTxt + ', seus anúncios apareceram <b>' + int.format(t.impr) + ' vezes</b>, trouxeram <b>' + int.format(t.clicks) + ' visitas</b> e geraram <b>' + int.format(t.wa) + ' ' + (t.wa === 1 ? 'conversa' : 'conversas') + ' no WhatsApp</b>, com <b>' + brl.format(t.cost) + '</b> investidos.';
         if (cpa) summary += ' Cada conversa custou, em média, <b>' + brl.format(cpa) + '</b>.';
@@ -256,6 +274,10 @@
       a.list.forEach(function (k) { if (k.wa >= 1 && (!best || k.cpc < best.cpc)) best = k; });
       if (a.list.filter(function (k) { return k.wa >= 1; }).length < 2) best = null;
 
+      var shown = a.list.filter(function (k) { return !(k.c.status === 'REMOVED' && k.cost === 0); })
+        .sort(function (x, y) { return isRunning(y.c) - isRunning(x.c) || y.cost - x.cost; });
+      var running = shown.filter(function (k) { return isRunning(k.c); }).length;
+
       var html = '';
       html += '<div class="summary">' + summary + (tip ? '<span class="tip">💡 ' + tip + '</span>' : '') + '</div>';
       html += '<div class="kpis">' +
@@ -264,25 +286,34 @@
         kpi('💬', 'Conversas no WhatsApp', int.format(t.wa), 'Toques no WhatsApp vindos do anúncio', true) +
         kpi('🎯', 'Custo por conversa', cpa ? brl.format(cpa) : '—', cpa ? 'Quanto custou cada conversa' : 'Aparece após a primeira conversa') +
         '</div>';
-      html += '<p class="small" style="margin-top:10px">O anúncio apareceu ' + int.format(t.impr) + ' vezes · taxa de clique ' + (ctr === null ? '—' : pct.format(ctr)) + ' · ' + active + (active === 1 ? ' campanha ativa' : ' campanhas ativas') + '</p>';
+      html += '<p class="small" style="margin-top:10px">O anúncio apareceu ' + int.format(t.impr) + ' vezes · taxa de clique ' + (ctr === null ? '—' : pct.format(ctr)) + ' · ' + active + (active === 1 ? ' campanha rodando' : ' campanhas rodando') + '</p>';
+
+      html += '<section style="margin-top:32px"><div class="section-head"><div><h2>Suas campanhas</h2><p class="muted">Situação atual e resultado de cada campanha no período escolhido.</p></div>' +
+        '<span class="pill ' + (running ? 'on' : 'off') + '" style="font-size:13px">' + running + ' de ' + shown.length + ' rodando</span></div><div class="camps">';
+      if (!shown.length) html += '<div class="empty">Nenhuma campanha publicada ainda.</div>';
+      shown.forEach(function (k) {
+        var isBest = best && best.c.id === k.c.id, st = statusInfo(k.c);
+        var kctr = k.impr ? k.clicks / k.impr : null, kcpc = k.clicks ? k.cost / k.clicks : null;
+        html += '<article class="camp' + (isBest ? ' best' : '') + '">' + (isBest ? '<span class="best-tag">Melhor custo por conversa</span>' : '') +
+          '<h3>' + esc(prettyName(k.c)) + '</h3><p class="kind">' + kind(k.c) + '</p>' +
+          '<div class="status-row">' + statusPill(k.c) + (k.c.budget ? '<span class="small">Orçamento ' + brl.format(k.c.budget) + '/dia</span>' : '') + '</div>' +
+          (st[2] ? '<p class="status-hint">' + st[2] + '</p>' : '') +
+          '<dl>' +
+          '<div><dt>Investido</dt><dd>' + brl.format(k.cost) + '</dd></div>' +
+          '<div><dt>Conversas no WhatsApp</dt><dd class="green">' + int.format(k.wa) + '</dd></div>' +
+          '<div><dt>Custo por conversa</dt><dd>' + (k.cpc ? brl.format(k.cpc) : '—') + '</dd></div>' +
+          '<div><dt>Visitas (cliques)</dt><dd>' + int.format(k.clicks) + '</dd></div>' +
+          '<div><dt>Apareceu no Google</dt><dd>' + int.format(k.impr) + '</dd></div>' +
+          '<div><dt>Taxa de clique</dt><dd>' + (kctr === null ? '—' : pct.format(kctr)) + '</dd></div>' +
+          '<div><dt>Custo por clique</dt><dd>' + (kcpc === null ? '—' : brl.format(kcpc)) + '</dd></div>' +
+          '<div><dt>WhatsApp: site / direto</dt><dd>' + int.format(k.waSite) + ' / ' + int.format(Math.max(k.waAdConv, k.waAdClicks)) + '</dd></div>' +
+          '</dl>' + (k.impr === 0 ? '<p class="status-hint" style="margin-top:12px">Ainda sem aparições neste período.</p>' : '') + '</article>';
+      });
+      html += '</div></section>';
 
       html += '<section><div class="section-head"><div><h2>Dia a dia</h2><p class="muted">Investimento e conversas em cada dia do período.</p></div>' +
         '<div class="legend"><span><i style="background:#E7CFC3"></i>Investido</span><span><i style="background:var(--green)"></i>Conversas</span></div></div>' +
         '<div class="chart-card">' + chart(r, a.byDay) + '</div></section>';
-
-      html += '<section><div class="section-head"><div><h2>Campanhas</h2><p class="muted">Como cada campanha está indo no período escolhido.</p></div></div><div class="camps">';
-      a.list.sort(function (x, y) { return (y.c.status === 'ENABLED') - (x.c.status === 'ENABLED') || y.cost - x.cost; }).forEach(function (k) {
-        if (k.c.status === 'REMOVED' && k.cost === 0) return;
-        var isBest = best && best.c.id === k.c.id;
-        html += '<article class="camp' + (isBest ? ' best' : '') + '">' + (isBest ? '<span class="best-tag">Melhor custo por conversa</span>' : '') +
-          '<h3>' + esc(prettyName(k.c)) + '</h3><p class="kind">' + kind(k.c) + '</p>' + statusPill(k.c) +
-          (k.c.budget ? ' <span class="small">· orçamento ' + brl.format(k.c.budget) + '/dia</span>' : '') +
-          '<dl><div><dt>Investido</dt><dd>' + brl.format(k.cost) + '</dd></div>' +
-          '<div><dt>Visitas</dt><dd>' + int.format(k.clicks) + '</dd></div>' +
-          '<div><dt>Conversas no WhatsApp</dt><dd class="green">' + int.format(k.wa) + '</dd></div>' +
-          '<div><dt>Custo por conversa</dt><dd>' + (k.cpc ? brl.format(k.cpc) : '—') + '</dd></div></dl></article>';
-      });
-      html += '</div></section>';
 
       var terms = DATA.searchTerms || [];
       html += '<section><div class="section-head"><div><h2>O que as pessoas pesquisaram</h2><p class="muted">Buscas no Google que mostraram seu anúncio e receberam cliques (últimos 7 dias).</p></div></div>';

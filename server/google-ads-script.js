@@ -28,7 +28,7 @@ function main() {
     campaigns: [], daily: [], convByAction: [], clickTypes: [], searchTerms: []
   };
 
-  var STATUS_PT = { PENDING: 'Em análise', NOT_ELIGIBLE: 'Não está veiculando', LIMITED: 'Veiculação limitada', ENDED: 'Encerrada', PAUSED: 'Pausada' };
+  var STATUS_PT = { PENDING: 'Em análise', NOT_ELIGIBLE: 'Não está veiculando', LIMITED: 'Veiculação limitada', ENDED: 'Encerrada', PAUSED: 'Pausada', LEARNING: 'Em aprendizado', MISCONFIGURED: 'Configuração com problema' };
 
   safe('campanhas', function () {
     var it = AdsApp.search(
@@ -40,6 +40,7 @@ function main() {
         id: String(r.campaign.id),
         name: r.campaign.name,
         status: r.campaign.status,
+        primaryStatus: r.campaign.primaryStatus || null,
         servingIssue: r.campaign.status === 'ENABLED' ? (STATUS_PT[r.campaign.primaryStatus] || null) : null,
         budget: r.campaignBudget ? Number(r.campaignBudget.amountMicros || 0) / 1e6 : null
       });
