@@ -2,6 +2,10 @@
 .gitignore
 .dockerignore
 Dockerfile
-*.json
 *.md
+_formatted.json
+NovoModelo-2025.json
 video/
+data/
+.env*
+*.local.*

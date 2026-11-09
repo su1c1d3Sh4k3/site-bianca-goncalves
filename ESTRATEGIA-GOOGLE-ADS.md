@@ -173,3 +173,23 @@ Revise o **relatório de termos de pesquisa toda semana** nas primeiras 4 semana
 - [ ] **Avaliações do Google:** voltaram ao site a pedido (seção "Avaliações", com destaque também no topo). A Nota Técnica CFP 1/2022 restringe depoimentos. Para reduzir o risco, os textos estão sem alteração de sentido, com link para a fonte pública, e o trecho "Dra. Bianca" foi omitido com (…). O ideal é ter consentimento por escrito das 3 autoras e confirmar com o CRP-04.
 - [ ] **Nota e total de avaliações:** se você me passar a nota média e o número de avaliações do perfil no Google, coloco no topo (ex.: "5,0 · 12 avaliações"). Não inventei esses números.
 - [ ] (Opcional) Gravar o vídeo de apresentação em formato vertical (9:16), com legenda. Ele funciona melhor no mobile e pode virar anúncio de vídeo no YouTube.
+
+## 7. Aprendizados da montagem (09/11/2026)
+
+- **O Google reprova palavras-chave com condição de saúde** (política "Saúde em publicidade personalizada"). Exemplos reprovados: "terapia para ansiedade online", "psicóloga para ansiedade", "terapia dependência emocional". O mesmo vale para o texto do anúncio: uma descrição que citava "ansiedade" também foi reprovada.
+  - **Use:** temas não clínicos, como online, mulheres, autoestima, relacionamentos, TCC e Terapia do Esquema.
+  - **No site:** a página de ansiedade (`?tema=ansiedade`) continua existindo, mas não pode ser alvo de palavras-chave com esse termo.
+- **Teste em andamento, R$ 10/dia cada:**
+  - **"Pesquisa | Terapia Online Mulheres" (Site):** o anúncio leva ao site, e a conversão é o clique no WhatsApp dentro da página.
+  - **"Pesquisa | WhatsApp Direto":** o anúncio tem o botão de WhatsApp, e a pessoa abre a conversa sem passar pelo site. Esses toques aparecem como cliques do tipo mensagem.
+- Os grupos separados por tema ficaram para depois da publicação, porque a tela de rascunho do Google Ads só aceita um grupo.
+
+## 8. Painel da Bianca (/painel)
+
+1. **Easypanel › app › Environment:** preencha `PAINEL_EMAIL` e `PAINEL_SENHA` (escolhidos por você) e copie `SESSION_SECRET` e `INGEST_TOKEN` do arquivo local `.env.painel.local`, que não vai para o git.
+2. **Recomendado:** monte um volume em `/app/data`, para que os dados sobrevivam a novos deploys. Sem o volume, eles voltam no próximo envio do script, em até 1 hora.
+3. **Google Ads › Ferramentas › Scripts › Novo:** cole o conteúdo de `server/google-ads-script.local.js`, que já vem com o token. Depois:
+   - clique em Autorizar;
+   - clique em Visualizar para testar;
+   - programe para rodar **a cada hora**.
+4. **Acesso:** `https://psibiancagoncalves.com.br/painel/`.
