@@ -260,6 +260,8 @@
     }
     .hero-trust li { display: flex; align-items: center; gap: 8px; }
     .hero-trust svg { width: 16px; height: 16px; color: var(--terra); flex: none; }
+    .hero-trust a { display: flex; align-items: center; gap: 8px; text-decoration: underline; text-decoration-color: var(--line); text-underline-offset: 4px; transition: text-decoration-color .2s; }
+    .hero-trust a:hover { text-decoration-color: currentColor; }
 
     .hero-media { position: relative; }
     .hero-media picture, .hero-media img { border-radius: var(--radius-lg); }
@@ -324,20 +326,60 @@
     .video-section { padding-top: 0; }
     .video-card { position: relative; border-radius: var(--radius-lg); overflow: hidden; background: var(--deep); aspect-ratio: 16 / 9; }
     .video-card video, .video-card img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+    .video-card picture img { object-position: 28% 40%; transition: transform 1.2s var(--ease); }
+    .video-card:hover picture img { transform: scale(1.02); }
     .video-play {
-      position: absolute; inset: 0; display: flex; flex-direction: row; align-items: flex-end; justify-content: flex-start; gap: 20px;
-      padding: clamp(24px, 4vw, 56px); text-align: left; color: #fff;
-      background: linear-gradient(180deg, rgba(43,36,32,0) 35%, rgba(43,36,32,.72) 100%);
+      position: absolute; inset: 0; display: flex; align-items: center; justify-content: flex-end;
+      padding: clamp(24px, 5vw, 72px); text-align: left; color: #fff;
+      background: linear-gradient(90deg, rgba(43,36,32,0) 32%, rgba(43,36,32,.55) 58%, rgba(43,36,32,.82) 100%);
     }
+    .video-copy { max-width: 400px; display: flex; flex-direction: column; align-items: flex-start; }
+    .video-eyebrow { font-family: var(--sans); font-size: 13px; font-weight: 500; letter-spacing: .08em; text-transform: uppercase; color: #F3C6B3; margin-bottom: 14px; }
+    .video-cta { display: inline-flex; align-items: center; gap: 14px; margin-top: 28px; font-family: var(--sans); font-size: 15px; font-weight: 500; }
     .video-play-btn {
-      width: 76px; height: 76px; border-radius: 50%; display: grid; place-items: center;
-      background: rgba(255,255,255,.22); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px);
+      width: 60px; height: 60px; border-radius: 50%; display: grid; place-items: center;
+      background: #fff; color: var(--terra-ink); box-shadow: 0 10px 30px -8px rgba(0,0,0,.4);
       flex: none; transition: transform .3s var(--ease), background-color .3s;
     }
-    .video-play-btn svg { width: 26px; height: 26px; margin-left: 4px; }
-    .video-play:hover .video-play-btn { transform: scale(1.06); background: rgba(255,255,255,.32); }
-    .video-title { display: block; font-family: var(--serif); font-size: clamp(26px, 3.6vw, 44px); line-height: 1.1; letter-spacing: -.02em; }
-    .video-sub { display: block; opacity: .8; font-size: 15px; margin-top: 6px; }
+    .video-play-btn svg { width: 22px; height: 22px; margin-left: 3px; }
+    .video-play:hover .video-play-btn { transform: scale(1.08); }
+    .video-title { display: block; font-family: var(--serif); font-size: clamp(30px, 3.8vw, 48px); line-height: 1.08; letter-spacing: -.02em; }
+    .video-title em { font-style: italic; font-weight: 300; color: #F3C6B3; }
+    .video-sub { display: block; color: rgba(255,255,255,.82); font-family: var(--sans); font-size: 16px; line-height: 1.55; margin-top: 14px; }
+
+    /* ===== REVIEWS (estilo Google) ===== */
+    .reviews { background: var(--sand); }
+    .reviews-head { display: flex; justify-content: space-between; align-items: end; gap: 32px; flex-wrap: wrap; margin-bottom: clamp(40px, 5vw, 64px); }
+    .reviews-head .h2 { margin-top: 20px; max-width: 12em; }
+    .g-source {
+      display: inline-flex; align-items: center; gap: 12px; padding: 10px 18px 10px 12px;
+      background: #fff; border-radius: 999px; font: 500 14px/1.2 Roboto, Arial, sans-serif; color: #202124;
+      box-shadow: 0 1px 2px rgba(60,64,67,.15), 0 1px 3px 1px rgba(60,64,67,.08);
+      transition: box-shadow .25s var(--ease);
+    }
+    .g-source:hover { box-shadow: 0 1px 3px rgba(60,64,67,.3), 0 4px 8px 3px rgba(60,64,67,.12); }
+    .g-source svg.g-logo { width: 22px; height: 22px; }
+    .g-source span { color: #1a73e8; }
+    .reviews-track { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; align-items: start; }
+    .g-review {
+      background: #fff; border-radius: 12px; padding: 20px 20px 18px;
+      border: 1px solid #dadce0;
+      font-family: Roboto, Arial, sans-serif; color: #202124; font-size: 14px; line-height: 20px; letter-spacing: .01em;
+    }
+    .g-review-top { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+    .g-avatar { width: 40px; height: 40px; border-radius: 50%; display: grid; place-items: center; color: #fff; font-size: 18px; font-weight: 400; flex: none; }
+    .g-name { font-weight: 500; font-size: 14px; color: #202124; display: block; }
+    .g-meta { font-size: 12px; color: #70757a; display: block; line-height: 16px; }
+    .g-review-top svg.g-logo { width: 20px; height: 20px; margin-left: auto; align-self: flex-start; }
+    .g-stars { display: flex; gap: 1px; margin-bottom: 8px; }
+    .g-stars svg { width: 14px; height: 14px; color: #fbbc04; }
+    .g-text { color: #3c4043; display: -webkit-box; -webkit-line-clamp: 6; -webkit-box-orient: vertical; overflow: hidden; }
+    .g-review.is-open .g-text { -webkit-line-clamp: unset; display: block; }
+    .g-more { color: #1a73e8; font: 500 14px/20px Roboto, Arial, sans-serif; margin-top: 4px; padding: 0; display: none; }
+    .g-review.has-more .g-more { display: inline-block; }
+    .g-review.is-open .g-more { display: none; }
+    .reviews-note { margin-top: 28px; font-size: 13px; color: var(--ink-3); }
+    .reviews-note a { text-decoration: underline; text-underline-offset: 2px; }
 
     /* ===== STEPS ===== */
     .steps { background: var(--deep); color: var(--on-deep); }
@@ -355,7 +397,7 @@
     /* ===== APPROACH ===== */
     .approach-head { max-width: 760px; margin: 0 auto clamp(56px, 7vw, 88px); text-align: center; }
     .approach-head .h2 { margin: 20px 0 24px; }
-    .approach-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; align-items: stretch; }
+    .approach-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; align-items: stretch; max-width: 980px; margin: 0 auto; }
     .approach-card { background: var(--sand); border-radius: var(--radius-md); padding: clamp(32px, 3.5vw, 48px); display: flex; flex-direction: column; }
     .approach-card .tag { font-size: 13px; font-weight: 500; color: var(--terra-ink); margin-bottom: 20px; }
     .approach-card h3 { font-size: 30px; margin-bottom: 16px; }
@@ -492,6 +534,14 @@
       .step-num { font-size: 44px; margin: 0; grid-row: span 2; }
       .step h3 { font-size: 22px; margin-bottom: 6px; }
 
+      .reviews-track {
+        grid-template-columns: none; grid-auto-flow: column; grid-auto-columns: 84%;
+        overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none;
+        margin: 0 calc(-1 * var(--gutter)); padding: 4px var(--gutter) 8px; scroll-padding: 0 var(--gutter);
+      }
+      .reviews-track::-webkit-scrollbar { display: none; }
+      .g-review { scroll-snap-align: start; }
+
       .final-card { grid-template-columns: 1fr; }
       .final-photo { min-height: 0; aspect-ratio: 16 / 10; order: -1; }
       .final-text .btn { width: 100%; }
@@ -511,10 +561,15 @@
       .credentials { grid-template-columns: 1fr; }
       .faq-item summary { font-size: 17px; padding: 22px 0; }
       .faq-answer { padding-right: 0; }
-      .video-card { aspect-ratio: 4 / 5; }
+      .video-card { aspect-ratio: 3 / 4; }
+      .video-sub { display: none; }
+      .video-title { font-size: 30px; }
+      .video-eyebrow { margin-bottom: 10px; }
       .video-card video { object-fit: contain; background: #000; }
-      .video-play-btn { width: 56px; height: 56px; }
-      .video-play { gap: 14px; }
+      .video-play { align-items: flex-end; justify-content: flex-start; background: linear-gradient(180deg, rgba(43,36,32,0) 48%, rgba(43,36,32,.88) 100%); }
+      .video-card picture img { object-position: 24% 20%; }
+      .video-cta { margin-top: 20px; }
+      .video-play-btn { width: 52px; height: 52px; }
     }
   </style>
 </head>
@@ -532,6 +587,8 @@
     <symbol id="i-home" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round" d="M4 10.5 12 4l8 6.5V20H4z"/><path fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round" d="M10 20v-5h4v5"/></symbol>
     <symbol id="i-play" viewBox="0 0 24 24"><path fill="currentColor" d="M7 4.5v15c0 .8.9 1.3 1.6.8l11.3-7.5a1 1 0 0 0 0-1.6L8.6 3.7c-.7-.5-1.6 0-1.6.8Z"/></symbol>
     <symbol id="i-ig" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="currentColor" stroke-width="1.7"/><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="1.7"/><circle cx="17.3" cy="6.7" r="1.1" fill="currentColor"/></symbol>
+    <symbol id="i-g" viewBox="0 0 48 48"><path fill="#FFC107" d="M43.6 20.1H42V20H24v8h11.3C33.7 32.7 29.2 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.8 1.2 7.9 3.1l5.7-5.7C34 6.1 29.3 4 24 4 13 4 4 13 4 24s9 20 20 20 20-9 20-20c0-1.3-.1-2.6-.4-3.9z"/><path fill="#FF3D00" d="m6.3 14.7 6.6 4.8C14.7 15.1 19 12 24 12c3.1 0 5.8 1.2 7.9 3.1l5.7-5.7C34 6.1 29.3 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"/><path fill="#4CAF50" d="M24 44c5.2 0 9.9-2 13.4-5.2l-6.2-5.2C29.2 35.1 26.7 36 24 36c-5.2 0-9.6-3.3-11.3-8l-6.5 5C9.5 39.6 16.2 44 24 44z"/><path fill="#1976D2" d="M43.6 20.1H42V20H24v8h11.3c-.8 2.2-2.2 4.2-4.1 5.6l6.2 5.2C37 39.2 44 34 44 24c0-1.3-.1-2.6-.4-3.9z"/></symbol>
+    <symbol id="i-star" viewBox="0 0 24 24"><path fill="currentColor" d="M12 17.3 18.2 21l-1.6-7L22 9.2l-7.2-.6L12 2 9.2 8.6 2 9.2 7.4 14l-1.6 7z"/></symbol>
   </svg>
 
   <!-- HEADER -->
@@ -573,7 +630,8 @@
           <ul class="hero-trust">
             <li><svg aria-hidden="true"><use href="#i-screen"/></svg> 100% online</li>
             <li><svg aria-hidden="true"><use href="#i-shield"/></svg> Sigilo profissional</li>
-            <li><svg aria-hidden="true"><use href="#i-clock"/></svg> Sessões de 50 minutos</li>
+            <li><svg aria-hidden="true"><use href="#i-clock"/></svg> Sessões de 50 min</li>
+            <li><a href="#avaliacoes"><svg aria-hidden="true"><use href="#i-g"/></svg> Avaliações no Google</a></li>
           </ul>
         </div>
         <div class="hero-media">
@@ -658,16 +716,64 @@
       </div>
     </section>
 
+    <!-- REVIEWS -->
+    <section class="reviews section" id="avaliacoes" aria-labelledby="reviews-title">
+      <div class="wrap">
+        <div class="reviews-head reveal">
+          <div>
+            <span class="eyebrow">Avaliações</span>
+            <h2 class="h2" id="reviews-title">O que dizem as mulheres que <em>já começaram</em>.</h2>
+          </div>
+          <a class="g-source" href="https://www.google.com/search?client=safari&amp;hs=vtwU&amp;sca_esv=c93d660d18cbc2b2&amp;hl=pt-br&amp;sxsrf=ANbL-n5drJBYRtcoB3Byc75PBOy2pWkSpg:1774867334039&amp;q=avalia%C3%A7%C3%B5es+sobre+psibiancagoncalves.com.br&amp;uds=ALYpb_kQbhpaS2wCL3QHzTXZyp4c49BxhZQIiNLzFWeKc16or9Ue71n8UZlbm_q6SgyXaHzImdGi5LhtKc0Xy8aOWaHNjB5cK4e_WYBGFg-uqdoadXQYfcd4JIf--RC160qb7Qzi6f7e1qqB8qUSZ6nsyxVNesKHCVNEQk0sHtXeq2-8BTvYPcSIrQvKdfK-ZbgQxrxXbxtI2xGY7DWX3XOW_OVuKYom9JliWWnK8mK-HK0Qxi50fZkjXlhFFzMlOKCrfjuiU1v5VZ8wRFff4pTYaKV9-d1Kssg7vmhegl1m2Iqw6xvuPNsxfCS5D90xnyNfbRUeptS7BrO0S4oeTdMQmEMyl5TqsrX1RtteNQJslvUvoI8CiW_prfDgRJH6o56dDxkjAVDOyVRucaRFncccH2WbeAPYZaq4HAwjBxdSYaUpNNu4XUGqVMzWzgH0iqwc2kkt2WLP&amp;si=AL3DRZEsmMGCryMMFSHJ3StBhOdZ2-6yYkXd_doETEE1OR-qOb0VmyQcxrbdRQo5JcK7XRfqjOn8jvTEyR0S4aAagmmkUfAc8PYeYl1D64dOySj1xbSXD9hLLz8QfGl82yhsd5GQFsfc8R1Kzmf8dQBGPuvTYGU-X8DQbUOxxcX9M0sw8gbiaf0%3D&amp;sa=X&amp;ved=2ahUKEwjC3N-HuMeTAxVxs5UCHaWOFLQQk8gLegQIfRAB&amp;ictx=1&amp;biw=428&amp;bih=821&amp;dpr=3&amp;zx=1775242665000" target="_blank" rel="noopener">
+            <svg class="g-logo" aria-hidden="true"><use href="#i-g"/></svg>
+            Avaliações no Google <span>Ver todas</span>
+          </a>
+        </div>
+        <div class="reviews-track reveal">
+          <article class="g-review">
+            <div class="g-review-top">
+              <span class="g-avatar" style="background:#E8710A" aria-hidden="true">R</span>
+              <div><span class="g-name">Raissa Gomes</span><span class="g-meta">Avaliação no Google</span></div>
+              <svg class="g-logo" aria-hidden="true"><use href="#i-g"/></svg>
+            </div>
+            <div class="g-stars" role="img" aria-label="5 de 5 estrelas"><svg aria-hidden="true"><use href="#i-star"/></svg><svg aria-hidden="true"><use href="#i-star"/></svg><svg aria-hidden="true"><use href="#i-star"/></svg><svg aria-hidden="true"><use href="#i-star"/></svg><svg aria-hidden="true"><use href="#i-star"/></svg></div>
+            <p class="g-text">Simplesmente maravilhosa! Extremamente profissional, empática e atenciosa, me acolheu desde o início com muito cuidado. Tenho evoluído em várias áreas da minha vida, e em muitos desses momentos pude contar com o apoio e sensibilidade dela. Quando comecei o tratamento, estava em um momento muito sombrio (…) Só gratidão por esse acompanhamento tão humano e acolhedor. ❤️</p>
+            <button class="g-more" type="button">Mais</button>
+          </article>
+          <article class="g-review">
+            <div class="g-review-top">
+              <span class="g-avatar" style="background:#7B1FA2" aria-hidden="true">A</span>
+              <div><span class="g-name">Adrielle Cristina André</span><span class="g-meta">Avaliação no Google</span></div>
+              <svg class="g-logo" aria-hidden="true"><use href="#i-g"/></svg>
+            </div>
+            <div class="g-stars" role="img" aria-label="5 de 5 estrelas"><svg aria-hidden="true"><use href="#i-star"/></svg><svg aria-hidden="true"><use href="#i-star"/></svg><svg aria-hidden="true"><use href="#i-star"/></svg><svg aria-hidden="true"><use href="#i-star"/></svg><svg aria-hidden="true"><use href="#i-star"/></svg></div>
+            <p class="g-text">Faço terapia com a Bianca há 2 anos, e foi incrível a minha evolução nesse período. Ela ouve sem julgamentos e sempre tem técnicas para ajudar em situações difíceis. Sou eternamente grata a ela!</p>
+            <button class="g-more" type="button">Mais</button>
+          </article>
+          <article class="g-review">
+            <div class="g-review-top">
+              <span class="g-avatar" style="background:#1E8E3E" aria-hidden="true">M</span>
+              <div><span class="g-name">Milene Paschoalini</span><span class="g-meta">Avaliação no Google</span></div>
+              <svg class="g-logo" aria-hidden="true"><use href="#i-g"/></svg>
+            </div>
+            <div class="g-stars" role="img" aria-label="5 de 5 estrelas"><svg aria-hidden="true"><use href="#i-star"/></svg><svg aria-hidden="true"><use href="#i-star"/></svg><svg aria-hidden="true"><use href="#i-star"/></svg><svg aria-hidden="true"><use href="#i-star"/></svg><svg aria-hidden="true"><use href="#i-star"/></svg></div>
+            <p class="g-text">Bianca é ótima, faço sessões remoto com ela desde pandemia e funciona muito bem. Ela faz a gente se sentir a vontade e confortável. Já me ajudou em vários temas (tanto pessoal como profissional), nos ajuda sempre evoluir e buscar o melhor de nós mesmo. Super recomendo!</p>
+            <button class="g-more" type="button">Mais</button>
+          </article>
+        </div>
+        <p class="reviews-note reveal">Avaliações públicas, publicadas espontaneamente no Google. <a href="https://www.google.com/search?client=safari&amp;hs=vtwU&amp;sca_esv=c93d660d18cbc2b2&amp;hl=pt-br&amp;sxsrf=ANbL-n5drJBYRtcoB3Byc75PBOy2pWkSpg:1774867334039&amp;q=avalia%C3%A7%C3%B5es+sobre+psibiancagoncalves.com.br&amp;uds=ALYpb_kQbhpaS2wCL3QHzTXZyp4c49BxhZQIiNLzFWeKc16or9Ue71n8UZlbm_q6SgyXaHzImdGi5LhtKc0Xy8aOWaHNjB5cK4e_WYBGFg-uqdoadXQYfcd4JIf--RC160qb7Qzi6f7e1qqB8qUSZ6nsyxVNesKHCVNEQk0sHtXeq2-8BTvYPcSIrQvKdfK-ZbgQxrxXbxtI2xGY7DWX3XOW_OVuKYom9JliWWnK8mK-HK0Qxi50fZkjXlhFFzMlOKCrfjuiU1v5VZ8wRFff4pTYaKV9-d1Kssg7vmhegl1m2Iqw6xvuPNsxfCS5D90xnyNfbRUeptS7BrO0S4oeTdMQmEMyl5TqsrX1RtteNQJslvUvoI8CiW_prfDgRJH6o56dDxkjAVDOyVRucaRFncccH2WbeAPYZaq4HAwjBxdSYaUpNNu4XUGqVMzWzgH0iqwc2kkt2WLP&amp;si=AL3DRZEsmMGCryMMFSHJ3StBhOdZ2-6yYkXd_doETEE1OR-qOb0VmyQcxrbdRQo5JcK7XRfqjOn8jvTEyR0S4aAagmmkUfAc8PYeYl1D64dOySj1xbSXD9hLLz8QfGl82yhsd5GQFsfc8R1Kzmf8dQBGPuvTYGU-X8DQbUOxxcX9M0sw8gbiaf0%3D&amp;sa=X&amp;ved=2ahUKEwjC3N-HuMeTAxVxs5UCHaWOFLQQk8gLegQIfRAB&amp;ictx=1&amp;biw=428&amp;bih=821&amp;dpr=3&amp;zx=1775242665000" target="_blank" rel="noopener">Ver no Google</a>.</p>
+      </div>
+    </section>
+
     <!-- ABOUT -->
-    <section class="about section" id="sobre" aria-labelledby="about-title" style="padding-top:0">
+    <section class="about section" id="sobre" aria-labelledby="about-title">
       <div class="wrap">
         <div class="about-media reveal">
-          <img src="assets/img/bianca-sofa-1000.webp"
-               srcset="assets/img/bianca-sofa-700.webp 700w, assets/img/bianca-sofa-1000.webp 1000w, assets/img/bianca-sofa-1600.webp 1536w"
+          <img src="assets/img/bianca-livro-1000.webp"
+               srcset="assets/img/bianca-livro-640.webp 640w, assets/img/bianca-livro-1000.webp 1000w"
                sizes="(max-width: 860px) 90vw, 38vw"
-               alt="Bianca Gonçalves sentada no sofá do consultório"
-               width="1000" height="667" loading="lazy" decoding="async"
-               style="object-position: 30% 40%">
+               alt="Psicóloga Bianca Gonçalves segurando O Livro da Psicologia"
+               width="1000" height="1500" loading="lazy" decoding="async">
         </div>
         <div class="about-text reveal">
           <span class="eyebrow">Sobre mim</span>
@@ -692,11 +798,17 @@
     <section class="video-section section" aria-label="Vídeo de apresentação" style="padding-bottom: var(--section)">
       <div class="wrap">
         <div class="video-card reveal" id="video-card">
-          <img src="assets/video/bianca-apresentacao-capa.webp" alt="" loading="lazy" decoding="async">
-          <button class="video-play" type="button" id="video-play" aria-label="Assistir ao vídeo de apresentação da Bianca">
-            <span class="video-play-btn"><svg aria-hidden="true"><use href="#i-play"/></svg></span>
-            <span><span class="video-title">Um recado meu para você</span>
-            <span class="video-sub">Vídeo · 49 segundos</span></span>
+          <picture>
+            <source media="(max-width: 600px)" srcset="assets/img/bianca-sofa-1000.webp">
+            <img src="assets/img/bianca-sofa-1600.webp" alt="" width="1536" height="1024" loading="lazy" decoding="async">
+          </picture>
+          <button class="video-play" type="button" id="video-play" aria-label="Assistir ao vídeo de apresentação da Bianca, 49 segundos">
+            <span class="video-copy">
+              <span class="video-eyebrow">Vídeo · 49 segundos</span>
+              <span class="video-title">Um recado meu <em>para você</em>.</span>
+              <span class="video-sub">Antes de mandar mensagem, me conheça um pouco. Quero que você se sinta à vontade desde o primeiro contato.</span>
+              <span class="video-cta"><span class="video-play-btn"><svg aria-hidden="true"><use href="#i-play"/></svg></span>Assistir ao vídeo</span>
+            </span>
           </button>
         </div>
       </div>
@@ -748,13 +860,6 @@
             <span class="tag">TCC</span>
             <h3>Terapia Cognitivo-Comportamental</h3>
             <p>Parte da ideia de que pensamentos, emoções e comportamentos estão conectados. Juntas, identificamos os pensamentos que te limitam e construímos ferramentas práticas para o dia a dia.</p>
-          </div>
-          <div class="approach-photo reveal">
-            <img src="assets/img/bianca-livro-640.webp"
-                 srcset="assets/img/bianca-livro-640.webp 640w, assets/img/bianca-livro-1000.webp 1000w"
-                 sizes="(max-width: 1020px) 90vw, 30vw"
-                 alt="Bianca Gonçalves lendo O Livro da Psicologia"
-                 width="640" height="960" loading="lazy" decoding="async">
           </div>
           <div class="approach-card reveal">
             <span class="tag">Terapia do Esquema</span>
@@ -1095,12 +1200,21 @@
         var card = document.getElementById('video-card');
         var v = document.createElement('video');
         v.src = 'assets/video/bianca-apresentacao.mp4';
+        v.poster = 'assets/video/bianca-apresentacao-capa.webp';
         v.controls = true; v.autoplay = true; v.playsInline = true;
         v.setAttribute('playsinline', '');
         card.innerHTML = '';
         card.appendChild(v);
         v.play().catch(function () {});
         if (cfg.ga4Id) gtag('event', 'video_play', { video_title: 'apresentacao' });
+      });
+
+      /* ---------- Avaliações: "Mais" ---------- */
+      document.querySelectorAll('.g-review').forEach(function (card) {
+        var t = card.querySelector('.g-text');
+        function check() { card.classList.toggle('has-more', t.scrollHeight > t.clientHeight + 2); }
+        check(); window.addEventListener('load', check);
+        card.querySelector('.g-more').addEventListener('click', function () { card.classList.add('is-open'); });
       });
 
       document.querySelectorAll('[data-year]').forEach(function (el) { el.textContent = new Date().getFullYear(); });

@@ -42,7 +42,8 @@ O site antigo está preservado em `versao-antiga/index.html` (não indexado) e n
 
 **Credibilidade e regras do CFP:**
 - Nome e CRP aparecem no topo, no "Sobre" e no rodapé.
-- Sem depoimentos, sem preço e sem "Dra.".
+- Sem preço e sem "Dra.".
+- Avaliações do Google exibidas por decisão da cliente (ver seção 6), no visual do Google e com link para a fonte pública.
 - Os textos descrevem objetivos possíveis, sem prometer resultado.
 - Aviso de emergência no rodapé (CVV 188 / SAMU 192).
 
@@ -169,5 +170,6 @@ Revise o **relatório de termos de pesquisa toda semana** nas primeiras 4 semana
 - [ ] **IDs do Google Ads / GA4** em `SITE_CONFIG` (seção 3).
 - [ ] **FAQ "Emito recibo… reembolso":** confirme se a Bianca emite recibo. Se não emitir, ajuste o texto.
 - [ ] **"Eu respondo pessoalmente"** (seção Como funciona): confirme se é a própria Bianca quem responde o WhatsApp.
-- [ ] **Depoimentos:** foram removidos por segurança ética. Se quiser usá-los, só com consentimento por escrito de cada paciente, e ainda assim o CRP os considera "não recomendados". Vale consultar o CRP-04.
+- [ ] **Avaliações do Google:** voltaram ao site a pedido (seção "Avaliações", com destaque também no topo). A Nota Técnica CFP 1/2022 restringe depoimentos. Para reduzir o risco, os textos estão sem alteração de sentido, com link para a fonte pública, e o trecho "Dra. Bianca" foi omitido com (…). O ideal é ter consentimento por escrito das 3 autoras e confirmar com o CRP-04.
+- [ ] **Nota e total de avaliações:** se você me passar a nota média e o número de avaliações do perfil no Google, coloco no topo (ex.: "5,0 · 12 avaliações"). Não inventei esses números.
 - [ ] (Opcional) Gravar o vídeo de apresentação em formato vertical (9:16), com legenda. Ele funciona melhor no mobile e pode virar anúncio de vídeo no YouTube.
