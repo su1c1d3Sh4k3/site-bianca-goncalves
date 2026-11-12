@@ -149,7 +149,7 @@
 
   <script>
   (function () {
-    var DATA = null, period = '7';
+    var DATA = null, VIS = null, period = '7';
     var brl = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' });
     var int = new Intl.NumberFormat('pt-BR', { maximumFractionDigits: 0 });
     var pct = new Intl.NumberFormat('pt-BR', { style: 'percent', maximumFractionDigits: 1 });
@@ -167,6 +167,44 @@
       .then(function (r) { if (r.status === 401) { location.href = '/painel/'; throw 0; } return r.json(); })
       .then(function (d) { DATA = d; render(); var t; window.addEventListener('resize', function () { clearTimeout(t); t = setTimeout(render, 200); }); })
       .catch(function (e) { if (e !== 0) $('#content').innerHTML = '<div class="empty">Não foi possível carregar os dados agora. Tente atualizar a página.</div>'; });
+
+    fetch('/painel/visitas.json', { credentials: 'same-origin' })
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (v) { VIS = v; render(); })
+      .catch(function () {});
+
+    var CTA_NAMES = { hero: 'Botão do topo', header: 'Botão do cabeçalho', 'sticky-mobile': 'Botão fixo no celular', sobre: 'Seção "Sobre mim"', 'como-funciona': 'Seção "Como funciona"', faq: 'Seção "Dúvidas"', final: 'Final da página', footer: 'Rodapé' };
+    function visitsSection(r) {
+      var h = '<section><div class="section-head"><div><h2>O que acontece no site</h2><p class="muted">Visitas que chegaram pelos anúncios: até onde rolaram a página e quantas tocaram no WhatsApp.</p></div></div>';
+      if (!VIS || !VIS.since) return h + '<div class="empty">A medição de visitas começou agora. Os primeiros números aparecem depois das próximas visitas.</div></section>';
+      var t = { visits: 0, mobile: 0, quick: 0, s25: 0, s50: 0, s75: 0, s100: 0, secSum: 0, withCta: 0, cta: {} };
+      Object.keys(VIS.days).forEach(function (d) {
+        if (!inRange(d, r)) return;
+        var o = VIS.days[d].ads;
+        ['visits', 'mobile', 'quick', 's25', 's50', 's75', 's100', 'secSum', 'withCta'].forEach(function (k) { t[k] += o[k]; });
+        Object.keys(o.cta).forEach(function (c) { t.cta[c] = (t.cta[c] || 0) + o.cta[c]; });
+      });
+      if (!t.visits) return h + '<div class="empty">Nenhuma visita vinda dos anúncios neste período (medição desde ' + VIS.since.split('-').reverse().join('/') + ').</div></section>';
+      function bar(label, n, hint) {
+        var p = n / t.visits;
+        return '<tr><td>' + label + (hint ? '<div class="small">' + hint + '</div>' : '') + '</td><td class="n">' + int.format(n) + '</td><td class="n" style="width:42%"><div style="background:var(--sand);border-radius:6px;height:10px"><div style="width:' + Math.round(p * 100) + '%;background:var(--terra);height:10px;border-radius:6px"></div></div><div class="small">' + pct.format(p) + '</div></td></tr>';
+      }
+      h += '<div class="kpis" style="margin-bottom:14px">' +
+        kpi('👀', 'Visitas', int.format(t.visits), int.format(t.mobile) + ' pelo celular') +
+        kpi('⏱️', 'Tempo médio', Math.round(t.secSum / t.visits) + ' s', 'Quanto tempo ficaram na página') +
+        kpi('🏃', 'Saíram rápido', pct.format(t.quick / t.visits), 'Ficaram menos de 10 segundos') +
+        kpi('💬', 'Tocaram no WhatsApp', int.format(t.withCta), pct.format(t.withCta / t.visits) + ' das visitas', t.withCta > 0) + '</div>';
+      h += '<table><thead><tr><th>Até onde rolaram</th><th class="n">Visitas</th><th class="n">Parte do total</th></tr></thead><tbody>' +
+        bar('Chegaram ao site', t.visits) + bar('Passaram de 1/4 da página', t.s25) + bar('Chegaram à metade', t.s50) +
+        bar('Passaram de 3/4', t.s75) + bar('Foram até o final', t.s100) + '</tbody></table>';
+      var ctas = Object.keys(t.cta).sort(function (a, b) { return t.cta[b] - t.cta[a]; });
+      if (ctas.length) {
+        h += '<table style="margin-top:14px"><thead><tr><th>Botão de WhatsApp tocado</th><th class="n">Toques</th></tr></thead><tbody>';
+        ctas.forEach(function (c) { h += '<tr><td>' + esc(CTA_NAMES[c] || c) + '</td><td class="n">' + int.format(t.cta[c]) + '</td></tr>'; });
+        h += '</tbody></table>';
+      }
+      return h + '</section>';
+    }
 
     function addDays(iso, n) { var d = new Date(iso + 'T12:00:00Z'); d.setUTCDate(d.getUTCDate() + n); return d.toISOString().slice(0, 10); }
     function range() {
@@ -324,6 +362,7 @@
         html += '</tbody></table>';
       }
       html += '</section>';
+      html += visitsSection(r);
       $('#content').innerHTML = html;
     }
 

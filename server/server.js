@@ -4,6 +4,7 @@
   - Serve o site estático (index, assets, política etc.).
   - /painel: painel de anúncios protegido por e-mail e senha (variáveis de ambiente).
   - /api/ads-ingest: recebe os números enviados pelo script do Google Ads (token secreto).
+  - /api/evt: registra o que as visitantes fazem no site (visita, rolagem, cliques), sem dados pessoais.
   Sem dependências externas e sem banco de dados: os dados ficam em um arquivo JSON.
 
   Variáveis de ambiente:
@@ -25,6 +26,7 @@ const ROOT = path.resolve(__dirname, '..');
 const SERVER_DIR = __dirname;
 const DATA_DIR = path.resolve(process.env.DATA_DIR || path.join(ROOT, 'data'));
 const DATA_FILE = path.join(DATA_DIR, 'ads.json');
+const EVENTS_FILE = path.join(DATA_DIR, 'visitas.jsonl');
 const PORT = Number(process.env.PORT || 80);
 
 const PAINEL_EMAIL = (process.env.PAINEL_EMAIL || '').trim().toLowerCase();
@@ -67,6 +69,68 @@ function saveData(obj) {
   fs.writeFileSync(tmp, JSON.stringify(obj));
   fs.renameSync(tmp, DATA_FILE);
   adsData = obj;
+}
+
+/* ---------- Visitas no site (primeira parte, sem cookies e sem IP) ---------- */
+const EVT_TYPES = new Set(['view', 'scroll', 'cta', 'leave']);
+const evtHits = new Map();
+function dayInSaoPaulo(d) { return new Date(d.getTime() - 3 * 3600e3).toISOString().slice(0, 10); }
+function cleanStr(v, max) { return String(v == null ? '' : v).replace(/[^\w-]/g, '').slice(0, max); }
+function recordEvent(ip, raw) {
+  const now = Date.now();
+  const hits = (evtHits.get(ip) || []).filter(t => now - t < 60e3);
+  if (hits.length >= 60) return;
+  hits.push(now); evtHits.set(ip, hits);
+  if (evtHits.size > 5000) evtHits.clear();
+  let e;
+  try { e = JSON.parse(raw); } catch (err) { return; }
+  if (!e || !EVT_TYPES.has(e.t)) return;
+  const row = {
+    ts: new Date(now).toISOString(), d: dayInSaoPaulo(new Date(now)), s: cleanStr(e.s, 24), t: e.t,
+    v: cleanStr(e.v, 24), tema: cleanStr(e.tema, 20), ads: e.ads ? 1 : 0, m: e.m ? 1 : 0, sec: Math.min(3600, Math.max(0, Number(e.sec) || 0))
+  };
+  if (!row.s) return;
+  fs.mkdirSync(DATA_DIR, { recursive: true });
+  fs.appendFile(EVENTS_FILE, JSON.stringify(row) + '\n', () => {});
+}
+function visitSummary(days) {
+  let lines = [];
+  try { lines = fs.readFileSync(EVENTS_FILE, 'utf8').split('\n'); } catch (e) { return { days: {}, since: null }; }
+  const from = dayInSaoPaulo(new Date(Date.now() - (days - 1) * 864e5));
+  const sessions = new Map();
+  let since = null;
+  for (const line of lines) {
+    if (!line) continue;
+    let e; try { e = JSON.parse(line); } catch (err) { continue; }
+    if (!since || e.d < since) since = e.d;
+    if (e.d < from) continue;
+    let s = sessions.get(e.s);
+    if (!s) { s = { d: e.d, ads: 0, m: e.m, tema: '', scroll: 0, sec: 0, cta: [], viewed: false }; sessions.set(e.s, s); }
+    if (e.ads) s.ads = 1;
+    if (e.tema) s.tema = e.tema;
+    if (e.t === 'view') s.viewed = true;
+    if (e.t === 'scroll') s.scroll = Math.max(s.scroll, Number(e.v) || 0);
+    if (e.t === 'cta') s.cta.push(e.v || 'desconhecido');
+    s.sec = Math.max(s.sec, e.sec || 0);
+  }
+  const out = {};
+  for (const s of sessions.values()) {
+    if (!s.viewed) continue;
+    const k = s.d;
+    const o = out[k] || (out[k] = { all: emptyDay(), ads: emptyDay() });
+    addSession(o.all, s);
+    if (s.ads) addSession(o.ads, s);
+  }
+  return { days: out, since };
+}
+function emptyDay() { return { visits: 0, mobile: 0, quick: 0, s25: 0, s50: 0, s75: 0, s100: 0, secSum: 0, withCta: 0, cta: {} }; }
+function addSession(o, s) {
+  o.visits++; if (s.m) o.mobile++;
+  if (s.sec < 10) o.quick++;
+  if (s.scroll >= 25) o.s25++; if (s.scroll >= 50) o.s50++; if (s.scroll >= 75) o.s75++; if (s.scroll >= 100) o.s100++;
+  o.secSum += Math.min(s.sec, 1800);
+  if (s.cta.length) o.withCta++;
+  s.cta.forEach(c => { o.cta[c] = (o.cta[c] || 0) + 1; });
 }
 
 /* ---------- Sessão ---------- */
@@ -212,6 +276,15 @@ const server = http.createServer(async (req, res) => {
       return send(req, res, 200, JSON.stringify({ ok: true, rows: data.daily.length }), 'application/json; charset=utf-8');
     }
 
+    /* Eventos de visita enviados pelo site */
+    if (urlPath === '/api/evt') {
+      if (req.method !== 'POST') return send(req, res, 405, 'method not allowed', 'text/plain; charset=utf-8');
+      const body = await readBody(req, 2048);
+      recordEvent(clientIp(req), body);
+      res.writeHead(204, SECURITY_HEADERS);
+      return res.end();
+    }
+
     /* Painel */
     if (urlPath === '/painel' || urlPath.startsWith('/painel/')) {
       if (urlPath === '/painel') return redirect(res, '/painel/');
@@ -236,6 +309,11 @@ const server = http.createServer(async (req, res) => {
       if (urlPath === '/painel/dados.json') {
         if (!logged) return send(req, res, 401, '{"erro":"login"}', 'application/json; charset=utf-8', NO_INDEX);
         return send(req, res, 200, JSON.stringify(adsData || { vazio: true }), 'application/json; charset=utf-8', NO_INDEX);
+      }
+
+      if (urlPath === '/painel/visitas.json') {
+        if (!logged) return send(req, res, 401, '{"erro":"login"}', 'application/json; charset=utf-8', NO_INDEX);
+        return send(req, res, 200, JSON.stringify(visitSummary(62)), 'application/json; charset=utf-8', NO_INDEX);
       }
 
       if (urlPath === '/painel/' || urlPath === '/painel/index.html') {

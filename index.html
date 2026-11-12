@@ -623,11 +623,12 @@
           <p class="lead" data-hero-lead>Psicoterapia online para mulheres que querem cuidar da autoestima, dos relacionamentos, dos limites e da ansiedade. Com Terapia Cognitivo-Comportamental e Terapia do Esquema, no seu ritmo.</p>
           <div class="hero-actions">
             <a class="btn btn-primary js-wa" data-cta="hero" href="https://wa.me/5537999637595" target="_blank" rel="noopener">
-              <svg aria-hidden="true"><use href="#i-wa"/></svg> Conversar no WhatsApp
+              <svg aria-hidden="true"><use href="#i-wa"/></svg> Agendar 1ª sessão gratuita
             </a>
             <a class="btn btn-ghost" href="#como-funciona">Como funciona <svg aria-hidden="true"><use href="#i-down"/></svg></a>
           </div>
           <ul class="hero-trust">
+            <li class="trust-free"><svg aria-hidden="true"><use href="#i-shield"/></svg> <strong>Primeira sessão gratuita</strong></li>
             <li><svg aria-hidden="true"><use href="#i-screen"/></svg> 100% online</li>
             <li><svg aria-hidden="true"><use href="#i-shield"/></svg> Sigilo profissional</li>
             <li><svg aria-hidden="true"><use href="#i-clock"/></svg> Sessões de 50 min</li>
@@ -834,8 +835,8 @@
           </div>
           <div class="step reveal">
             <span class="step-num">3</span>
-            <h3>Fazemos a primeira sessão</h3>
-            <p>Por videochamada, de onde você estiver. Encontros semanais de 50 minutos, com total sigilo.</p>
+            <h3>Fazemos a primeira sessão, gratuita</h3>
+            <p>Por videochamada, de onde você estiver, para você me conhecer sem compromisso. Depois, encontros semanais de 50 minutos, com total sigilo.</p>
           </div>
         </div>
         <div class="steps-cta reveal">
@@ -916,7 +917,7 @@
           <details class="faq-item">
             <summary>Nunca fiz terapia. Como é a primeira sessão?<span class="faq-icon"><svg aria-hidden="true"><use href="#i-plus"/></svg></span></summary>
             <div class="faq-answer">
-              <p>A primeira sessão é um momento para nos conhecermos. Você conta o que te trouxe até aqui, no seu tempo, e eu explico como vamos trabalhar. Não existe resposta certa nem errada, e você não precisa chegar sabendo o que dizer.</p>
+              <p>A primeira sessão é um momento para nos conhecermos. Ela é gratuita: você conta o que te trouxe até aqui, no seu tempo, e eu explico como vamos trabalhar, sem compromisso de continuar. Não existe resposta certa nem errada, e você não precisa chegar sabendo o que dizer.</p>
             </div>
           </details>
           <details class="faq-item">
@@ -1087,7 +1088,7 @@
       }
 
       /* ---------- Links do WhatsApp ---------- */
-      var waText = 'Olá, Bianca! Vim pelo site e gostaria de saber mais sobre a terapia.';
+      var waText = 'Olá, Bianca! Vim pelo site e gostaria de agendar a primeira sessão gratuita.';
       var waHref = 'https://wa.me/' + (cfg.whatsapp || '5537999637595') + '?text=' + encodeURIComponent(waText);
       var waLinks = document.querySelectorAll('.js-wa');
       waLinks.forEach(function (a) { a.href = waHref; });
@@ -1147,8 +1148,34 @@
           if (cfg.ga4Id) {
             gtag('event', 'clique_whatsapp', { cta_local: where, transport_type: 'beacon' });
           }
+          track('cta', where);
         });
       });
+
+      /* ---------- Medição própria de visitas (sem cookies, sem dados pessoais) ---------- */
+      var visitId, t0 = Date.now(), maxScroll = 0, sentScroll = 0;
+      try {
+        visitId = sessionStorage.getItem('bg_v');
+        if (!visitId) { visitId = Math.random().toString(36).slice(2, 12); sessionStorage.setItem('bg_v', visitId); }
+      } catch (e) { visitId = Math.random().toString(36).slice(2, 12); }
+      var fromAds = /[?&](gclid|gbraid|wbraid)=/.test(location.search) || /[?&]tema=/.test(location.search);
+      var isMobile = window.matchMedia('(max-width: 760px)').matches;
+      function track(type, value) {
+        var body = JSON.stringify({ s: visitId, t: type, v: value || '', tema: tema, ads: fromAds, m: isMobile, sec: Math.round((Date.now() - t0) / 1000) });
+        try {
+          if (navigator.sendBeacon) navigator.sendBeacon('/api/evt', new Blob([body], { type: 'text/plain' }));
+          else fetch('/api/evt', { method: 'POST', body: body, keepalive: true });
+        } catch (e) {}
+      }
+      track('view');
+      window.addEventListener('scroll', function () {
+        var h = document.documentElement.scrollHeight - window.innerHeight;
+        var p = h > 0 ? Math.round(window.scrollY / h * 100) : 100;
+        if (p > maxScroll) maxScroll = p;
+        var step = maxScroll >= 98 ? 100 : Math.floor(maxScroll / 25) * 25;
+        if (step > sentScroll) { sentScroll = step; track('scroll', String(step)); }
+      }, { passive: true });
+      document.addEventListener('visibilitychange', function () { if (document.visibilityState === 'hidden') track('leave'); });
 
       /* ---------- Header + CTA fixo no mobile ---------- */
       var header = document.querySelector('.header');
