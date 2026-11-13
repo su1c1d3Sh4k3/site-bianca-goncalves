@@ -253,6 +253,9 @@
     .hero-id .br-m { display: none; }
     .hero h1 { font-size: clamp(42px, 5.4vw, 72px); margin-bottom: 24px; }
     .hero .lead { max-width: 33em; margin-bottom: 36px; }
+    .hero-offer { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; margin: -8px 0 22px; font-size: 15px; color: var(--ink-2); }
+    .hero-offer strong { color: var(--terra); font-weight: 600; }
+    .hero-offer .dot-sep { color: var(--ink-3); }
     .hero-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 20px; }
     .hero-trust {
       display: flex; flex-wrap: wrap; gap: 10px 26px; margin-top: 36px; padding-top: 24px;
@@ -511,7 +514,10 @@
       .header .wrap { height: 64px; }
       .header-logo img { height: 32px; }
 
-      .hero { padding-top: 96px; }
+      .hero { padding-top: 84px; }
+      .hero h1 { font-size: clamp(34px, 9.4vw, 44px); }
+      .hero-offer { font-size: 14px; margin: -6px 0 16px; }
+      .hero .lead { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; font-size: 16px; }
       .hero .wrap { grid-template-columns: 1fr; gap: 40px; }
       .hero-id { margin-bottom: 20px; }
       .hero-id img { display: block; }
@@ -519,7 +525,7 @@
       .hero-id .br-m { display: inline; }
       .hero-id .sep { display: none; }
       .hero h1 { margin-bottom: 20px; }
-      .hero .lead { margin-bottom: 32px; }
+      .hero .lead { margin-bottom: 20px; }
       .hero-actions .btn-primary { width: 100%; }
       .hero-actions .btn-ghost { display: none; }
       .hero-trust { margin-top: 32px; padding-top: 22px; gap: 10px 20px; }
@@ -549,7 +555,12 @@
       .sticky-cta { display: block; }
       .header .btn { transition: opacity .3s var(--ease), transform .3s var(--ease); }
       .sticky-on .header .btn { opacity: 0; transform: translateY(-6px); pointer-events: none; }
-      .cookie { left: 12px; right: 12px; max-width: none; bottom: calc(12px + env(safe-area-inset-bottom)); }
+      .cookie { left: 8px; right: 8px; max-width: none; bottom: calc(8px + env(safe-area-inset-bottom)); padding: 10px 12px; border-radius: 14px; display: none; align-items: center; gap: 10px; font-size: 13px; }
+      .cookie.is-visible { display: flex; }
+      .cookie p { flex: 1; }
+      .cookie-actions { margin-top: 0; gap: 6px; }
+      .cookie-actions button { min-height: 34px; padding: 0 12px; font-size: 13px; flex: none; }
+      .cookie-on .sticky-cta { bottom: calc(70px + env(safe-area-inset-bottom)); }
       .footer { padding-bottom: calc(100px + env(safe-area-inset-bottom)); }
     }
 
@@ -620,6 +631,7 @@
             <span><strong>Bianca Gonçalves</strong><span class="sep"> · </span><br class="br-m">Psicóloga · CRP 04/55402</span>
           </div>
           <h1 id="hero-title" data-hero-title>Um espaço seguro para você voltar a se <em>escolher</em>.</h1>
+          <p class="hero-offer"><span>Atendimento particular</span><span class="dot-sep" aria-hidden="true">·</span><strong>1ª sessão gratuita</strong><span class="dot-sep" aria-hidden="true">·</span><span>100% online</span></p>
           <p class="lead" data-hero-lead>Psicoterapia online para mulheres que querem cuidar da autoestima, dos relacionamentos, dos limites e da ansiedade. Com Terapia Cognitivo-Comportamental e Terapia do Esquema, no seu ritmo.</p>
           <div class="hero-actions">
             <a class="btn btn-primary js-wa" data-cta="hero" href="https://wa.me/5537999637595" target="_blank" rel="noopener">
@@ -1026,13 +1038,13 @@
   <!-- STICKY MOBILE CTA -->
   <div class="sticky-cta" id="sticky-cta" aria-hidden="true">
     <a class="btn btn-primary js-wa" data-cta="sticky-mobile" href="https://wa.me/5537999637595" target="_blank" rel="noopener" tabindex="-1">
-      <svg aria-hidden="true"><use href="#i-wa"/></svg> Conversar no WhatsApp
+      <svg aria-hidden="true"><use href="#i-wa"/></svg> Agendar 1ª sessão gratuita
     </a>
   </div>
 
   <!-- COOKIE BANNER -->
   <div class="cookie" id="cookie" role="dialog" aria-live="polite" aria-label="Aviso de cookies">
-    <p>Usamos cookies para medir o desempenho dos anúncios e melhorar o site. Nenhuma informação sobre sua saúde é coletada. <a href="politica-de-privacidade.html">Saiba mais</a>.</p>
+    <p>Usamos cookies só para medir os anúncios. <a href="politica-de-privacidade.html">Saiba mais</a></p>
     <div class="cookie-actions">
       <button class="cookie-decline" type="button" data-consent="denied">Recusar</button>
       <button class="cookie-accept" type="button" data-consent="granted">Aceitar</button>
@@ -1129,13 +1141,14 @@
       }
 
       var cookie = document.getElementById('cookie');
-      if (!stored && tagId) cookie.classList.add('is-visible');
+      if (!stored && tagId) { cookie.classList.add('is-visible'); document.documentElement.classList.add('cookie-on'); }
       cookie.addEventListener('click', function (e) {
         var v = e.target.getAttribute('data-consent');
         if (!v) return;
         try { localStorage.setItem(CONSENT_KEY, v); } catch (err) {}
         applyConsent(v);
         cookie.classList.remove('is-visible');
+        document.documentElement.classList.remove('cookie-on');
       });
 
       /* ---------- Conversão: clique no WhatsApp ---------- */
